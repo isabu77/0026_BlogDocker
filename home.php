@@ -16,16 +16,16 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity    ="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 <body>
-<section class="sectionHome">
-		<h1>Le BLOG</h1>
+    <section class="sectionHome">
+		<h1 class="titreduhaut">Le BLOG</h1>
 		<h2>Welcome!</h2>
 	</section>
     <section id="posts">
 	<?php foreach($posts as $value) : ?>
 		<article class="post">
-        <h2><?= $value['id'] . '-' . $value['name']; ?></h2>
-        <h3><?= $value['slug']; ?></h3>
-			<p><?= $value['content']; ?></p>
+        <p class="titre"><?= $value['id'] . '-' . $value['name']; ?></p>
+        <p class="slug"><?= $value['slug']; ?></p>
+		<p class="content"><?= substr((String)$value['content'],0,150) . '...'; ?></p>
 		</article>
 	<?php endforeach; ?>
 </section>
