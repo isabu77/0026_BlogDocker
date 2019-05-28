@@ -13,6 +13,7 @@
     }else{
             if (null != $_GET['page'] && !intval($_GET['page']) || $_GET['page'] > $pagination){
                 $message = "page introuvable";
+                $posts = [];
             }
             $start = 0;
         }
@@ -47,8 +48,9 @@
         <h1>Le BLOG Docker</h1>
     </section>
     <?php 
-    if (count($posts) <= 0){
-        echo '<h2>page introuvable</h2>';
+    //if (count($posts) <= 0){
+    if ($message){
+            echo '<h2 class="alert-message">Page introuvable</h2>';
     }else{?>
     <section id="posts">
         <?php 
