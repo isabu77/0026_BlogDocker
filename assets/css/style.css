@@ -1,16 +1,20 @@
 @charset "UTF-8";
-body .titreduhaut {
-    text-align: center;
-}
-
 body section {
     margin-bottom: 5%;
 }
 
-body section h1,
-body section h2 {
+h1 {
     text-align: center;
     color: rgb(129, 158, 213);
+}
+
+h2 {
+    text-align: center;
+}
+
+body #posts h2 {
+    text-align: center;
+    color: rgb(241, 10, 21);
 }
 
 body #posts .post div img {
@@ -61,29 +65,26 @@ body .formProfil .form-group input {
     outline: 0;
 }
 
-body footer {
-    background-color: #2196F3;
-    line-height: 20px;
+footer nav {
+    justify-content: center;
+    width: 100px;
+    margin: 0 auto;
 }
 
-body footer nav ul {
-    list-style: none;
+footer nav ul {
     display: flex;
-    justify-content: space-around;
-    margin: 0;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-body footer nav ul li a {
-    color: #FFFFFF;
+footer nav ul li {
+    list-style: none;
 }
 
 @media (min-width: 768px) {
     /* PAGE HOME */
     section h1 {
         font-size: 3vw;
-    }
-    section h2 {
-        font-size: 2.5vw;
     }
     section article {
         flex-direction: row !important;
@@ -153,20 +154,4 @@ body footer nav ul li a {
 
 .formProfil table {
     width: 100%;
-}
-
-
-/*  FOOTER */
-
-footer {
-    height: 5vh;
-    display: flex;
-    align-items: center;
-}
-
-footer nav {
-    width: 100%;
-}
-
-
 }

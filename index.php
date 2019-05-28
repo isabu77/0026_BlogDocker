@@ -17,6 +17,8 @@ $router->map( 'GET', '/post/', function() { require 'post.php';});
 // map user details page
 $router->map( 'GET', '/user/[i:id]/', function( $id ) {	require 'user.php';});
 
+$router->map( 'GET', '/page=[i:id]/', function( $id ) {	require 'home.php';});
+
 // regarde si une route matche dans les routes définies au-dessus
 $match = $router->match();
 
