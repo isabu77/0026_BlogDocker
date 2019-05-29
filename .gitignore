@@ -1,1 +1,4 @@
 .env
+www/public/adminer.php
+www/vendor
+
