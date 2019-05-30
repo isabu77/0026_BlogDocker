@@ -1,4 +1,4 @@
-<? 
+<?php 
 namespace App;
 
 class Router{
@@ -18,23 +18,24 @@ class Router{
 
     }
 
-    public function run():void
+    // regarde si une route matche dans les routes définies au-dessus
+    public function run(): void
     {
-       // regarde si une route matche dans les routes définies au-dessus
         $match = $this->router->match();
-
-        if( is_array($match) ) {
-            ob_start();  // démarre le cache
+        if (is_array($match)) {
+            ob_start(); // démarre le cache
             $params = $match['params'];
-            require $this->viewPath . DIRECTORY_SEPARATOR . $match['target'] . '.php';
-            $content = ob_get_clean(); // récupère le cache
-            require $this->viewPath . DIRECTORY_SEPARATOR . 'layout/default.php';
-            exit();
+            require $this->pathToFile($match['target']);
         } else {
             // no route was matched
-            header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-            exit();
+            header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            require $this->pathToFile("layout/404");
         }
-
+        $content = ob_get_clean(); // récupère le html du cache
+        require $this->pathToFile("layout/default");
+    }
+    private function pathToFile(string $file): string
+    {
+        return $this->viewPath . DIRECTORY_SEPARATOR . $file . '.php';
     }
 }
