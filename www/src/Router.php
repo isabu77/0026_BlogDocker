@@ -22,9 +22,9 @@ class Router{
     public function run(): void
     {
         $match = $this->router->match();
+        ob_start(); // démarre le cache
         if (is_array($match)) {
-            ob_start(); // démarre le cache
-            $params = $match['params'];
+             $params = $match['params'];
             require $this->pathToFile($match['target']);
         } else {
             // no route was matched
