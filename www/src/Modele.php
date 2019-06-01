@@ -63,7 +63,7 @@ class Modele
             ->fetchAll(\PDO::FETCH_OBJ));
     }
 
-    // retourne la catégories recherché par son id
+    // retourne la catégories recherchée par son id
     public function getCategory(int $id): object
     {
         return ((object)$this->pdo->query(

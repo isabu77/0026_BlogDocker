@@ -10,11 +10,6 @@ class Post
         $this->post = $post;
     }
 
-    // extrait du contenu 
-    public function excerpt(): string
-    {
-        return (substr($this->post->content, 0, 100));
-    }
 
     // date de création
     public function getCreatedAt(): string
@@ -27,13 +22,20 @@ class Post
     {
         return ((string)$this->post->slug);
     }
+
     // name
     public function getName(): string
     {
         return ((string)$this->post->name);
     }
 
-    // contenu
+    // extrait du contenu 
+    public function getExcerptContent(): string
+    {
+        return (substr($this->post->content, 0, 100));
+    }
+
+    // contenu entier
     public function getContent(): string
     {
         return ((string)$this->post->content);

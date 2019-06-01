@@ -21,4 +21,10 @@ class Category
     {
         return ((string)$this->Category->name);
     }
+    
+    // id
+    public function getId(): string
+    {
+        return ((string)$this->Category->id);
+    }
 }

@@ -53,7 +53,7 @@ $title = 'Mon Super MEGA blog';
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><?= $postObj->getName() ?></h5>
-                    <p class="card-text"><?= $postObj->excerpt() ?>...</p>
+                    <p class="card-text"><?= $postObj->getExcerptContent() ?>...</p>
                 </div>
                 <a href="/article/<?= $post->slug ?>-<?= $post->id ?>" class="text-center pb-2">lire plus</a>
                 <div class="card-footer text-muted">

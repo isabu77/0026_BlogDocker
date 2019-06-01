@@ -16,6 +16,6 @@ $categories = $modele->getCategories();
 <ul>
     <?php foreach ($categories as $category) : ?>
         <?php $categoryObj = new App\Category($category); ?>
-        <li>categorie <?= $categoryObj->getName() ?></li>
+        <li>categorie <?= " " . $category->id . " - ". $categoryObj->getName() . " : " . $categoryObj->getSlug()?></li>
     <?php endforeach; ?>
 </ul>
