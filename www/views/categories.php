@@ -4,11 +4,18 @@
  * 
  */
 $title = "Catégories";
+
+// Connexion à la base
+$modele = new App\Modele();
+
+// lecture des catégories dans la base 
+$categories = $modele->getCategories();
+
 ?>
 
 <ul>
-    <li>categorie 1</li>
-    <li>categorie 2</li>
-    <li>categorie 3</li>
-    <li>categorie 4</li>
+    <?php foreach ($categories as $category) : ?>
+        <?php $categoryObj = new App\Category($category); ?>
+        <li>categorie <?= $categoryObj->getName() ?></li>
+    <?php endforeach; ?>
 </ul>

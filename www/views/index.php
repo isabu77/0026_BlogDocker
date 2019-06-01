@@ -4,8 +4,10 @@
  * 
  */
 
+$modele = new App\Modele();
+$nbPosts = $modele->getNbPost();
 
-$pdo = new PDO(
+/* $pdo = new PDO(
     "mysql:dbname=" .
         getenv('MYSQL_DATABASE') . ";host=" .
         getenv('MYSQL_HOST') . ";charset=UTF8",
@@ -13,7 +15,9 @@ $pdo = new PDO(
     getenv('MYSQL_PASSWORD')
 );
 
-$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0];
+$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0]; */
+
+
 $perPage = 12;
 $nbPage = ceil($nbpost / $perPage);
 if ((int)$_GET["page"] > $nbPage) {
@@ -26,11 +30,14 @@ if (isset($_GET["page"])) {
     $currentpage = 1;
 }
 $offset = ($currentpage - 1) * $perPage;
-$posts = $pdo->query("SELECT * FROM post 
+// lecture des articles de la page dans la base
+$posts = $modele->getPosts($perPage, $offset);
+
+/* $posts = $pdo->query("SELECT * FROM post 
                     ORDER BY id 
                     LIMIT {$perPage} 
                     OFFSET {$offset}")
-    ->fetchAll(PDO::FETCH_OBJ);
+    ->fetchAll(PDO::FETCH_OBJ); */
 $title = 'Mon Super MEGA blog';
 ?>
 
@@ -45,7 +52,7 @@ $title = 'Mon Super MEGA blog';
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><?= $post->name ?></h5>
+                    <h5 class="card-title"><?= $postObj->getName() ?></h5>
                     <p class="card-text"><?= $postObj->excerpt() ?>...</p>
                 </div>
                 <a href="/article/<?= $post->slug ?>-<?= $post->id ?>" class="text-center pb-2">lire plus</a>

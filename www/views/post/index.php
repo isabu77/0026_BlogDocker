@@ -4,8 +4,24 @@
  * 
  */
 $id = $params['id'];
+/*
 $slug = $params['slug'];
-$title = "article " . $slug;
+$title = "article " . $slug; */
+
+// Connexion à la base
+$modele = new App\Modele();
+
+// lecture de l'article îd dans la base (objet Post)
+$post = new App\Post($modele->getPost($id));
+
+$title = "Article " . $post->getName();
+
+
 ?>
 
-<p>article avec l'id <big><?= $id . '</big> et le slug <big>' . $slug ?></big></p>
+<p>Article <big><?= $id ?></big></p>
+<p>Slug : <big><?= $post->getSlug() ?></big></p>
+
+<p>Date : <big><?= $post->getCreatedAt() ?></big></p>
+
+<p><?= $post->getContent() ?></p>
