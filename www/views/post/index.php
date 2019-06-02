@@ -9,11 +9,12 @@ $slug = $params['slug'];
 $title = "article " . $slug; */
 
 // Connexion à la base
-$modele = new App\Modele();
+$post = new App\Post();
 
 // lecture de l'article îd dans la base (objet Post)
-$post = new App\Post($modele->getPost($id));
+$post->getPost($id);
 
+//dd($post);
 $title = "Article " . $post->getName();
 
 

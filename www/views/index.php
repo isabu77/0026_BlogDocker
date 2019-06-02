@@ -4,8 +4,8 @@
  * 
  */
 
-$modele = new App\Modele();
-$nbPosts = $modele->getNbPost();
+$post = new App\Post();
+$nbPosts = $post->getNbPost();
 
 /* $pdo = new PDO(
     "mysql:dbname=" .
@@ -31,7 +31,7 @@ if (isset($_GET["page"])) {
 }
 $offset = ($currentpage - 1) * $perPage;
 // lecture des articles de la page dans la base
-$posts = $modele->getPosts($perPage, $offset);
+$posts = $post->getPosts($perPage, $offset);
 
 /* $posts = $pdo->query("SELECT * FROM post 
                     ORDER BY id 

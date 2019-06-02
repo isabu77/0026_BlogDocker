@@ -6,10 +6,10 @@
 $title = "Catégories";
 
 // Connexion à la base
-$modele = new App\Modele();
+$category = new App\Category();
 
 // lecture des catégories dans la base 
-$categories = $modele->getCategories();
+$categories = $category->getCategories();
 
 ?>
 
