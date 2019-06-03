@@ -28,5 +28,5 @@ $router = new App\Router($basepath . 'views');
 $router->get('/', 'index', 'home')
         ->get('/categories', 'categories', 'categories')
         ->get('/contact', 'contact', 'contact')
-        ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
+        ->get('/article/[i:id]', 'post/index', 'post')
         ->run();

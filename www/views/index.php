@@ -4,8 +4,8 @@
  * 
  */
 
-$post = new App\Post();
-$nbPosts = $post->getNbPost();
+$postTable = new App\PostTable();
+$nbPosts = $postTable->getNbPost();
 
 /* $pdo = new PDO(
     "mysql:dbname=" .
@@ -31,7 +31,7 @@ if (isset($_GET["page"])) {
 }
 $offset = ($currentpage - 1) * $perPage;
 // lecture des articles de la page dans la base
-$posts = $post->getPosts($perPage, $offset);
+$posts = $postTable->getPosts($perPage, $offset);
 
 /* $posts = $pdo->query("SELECT * FROM post 
                     ORDER BY id 
@@ -48,16 +48,15 @@ $title = 'Mon Super MEGA blog';
 <?php endif ?>
 <section class="row">
     <?php foreach ($posts as $post) : ?>
-        <?php $postObj = new App\Post($post); ?>
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><?= $postObj->getName() ?></h5>
-                    <p class="card-text"><?= $postObj->getExcerptContent() ?>...</p>
+                    <h5 class="card-title"><?= $post->getName() ?></h5>
+                    <p class="card-text"><?= $post->getExcerptContent() ?>...</p>
                 </div>
-                <a href="/article/<?= $post->slug ?>-<?= $post->id ?>" class="text-center pb-2">lire plus</a>
+                <a href="/article/<?= $post->getId() ?>" class="text-center pb-2">lire plus</a>
                 <div class="card-footer text-muted">
-                    <?= ($postObj->getCreatedAt())   ?>
+                    <?= ($post->getCreatedAt())   ?>
                 </div>
             </div>
         </article>

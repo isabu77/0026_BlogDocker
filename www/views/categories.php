@@ -6,16 +6,15 @@
 $title = "Catégories";
 
 // Connexion à la base
-$category = new App\Category();
+$categoryTable = new App\CategoryTable();
 
 // lecture des catégories dans la base 
-$categories = $category->getCategories();
+$categories = $categoryTable->getCategories();
 
 ?>
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-        <?php $categoryObj = new App\Category($category); ?>
-        <li>categorie <?= " " . $category->id . " - ". $categoryObj->getName() . " : " . $categoryObj->getSlug()?></li>
+         <li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li>
     <?php endforeach; ?>
 </ul>

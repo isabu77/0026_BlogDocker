@@ -9,10 +9,10 @@ $slug = $params['slug'];
 $title = "article " . $slug; */
 
 // Connexion à la base
-$post = new App\Post();
+$postTable = new App\PostTable();
 
 // lecture de l'article îd dans la base (objet Post)
-$post->getPost($id);
+$post = $postTable->getPost($id);
 
 //dd($post);
 $title = "Article " . $post->getName();

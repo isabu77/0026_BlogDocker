@@ -1,73 +1,62 @@
 <?php
 namespace App;
 
-require_once 'Modele.php';
-
-// Classe Post : un article du blog , hérite de la classe Modele
-class Post extends Modele
+/**
+ *  Classe Post : un article du blog 
+ **/
+class Post 
 {
-    private $post;
+    private $id;
+    private $name;
+    private $slug;
+    private $created_at;
+    private $content;
 
-    public function __construct(object $post = null)
+    // id
+    public function getId(): int
     {
-        $this->post = $post;
+        return ($this->id);
     }
-
-    // date de création
+       /**
+     *  date de création
+     **/
     public function getCreatedAt(): string
     {
-        return (new \DateTime($this->post->created_at))->format('d/m/Y h:i');
+        return (new \DateTime($this->created_at))->format('d/m/Y h:i');
     }
 
-    // slug
+    /**
+     *  slug
+     **/
+    
     public function getSlug(): string
     {
-        return ((string)$this->post->slug);
+        return ((string)$this->slug);
     }
 
-    // name
+    /**
+     *  name
+     **/
     public function getName(): string
     {
-        return ((string)$this->post->name);
+        return ((string)$this->name);
     }
 
-    // extrait du contenu 
+    /**
+     *  extrait du contenu
+     **/
     public function getExcerptContent(): string
     {
-        return (substr($this->post->content, 0, 100));
+        return (substr($this->content, 0, 100));
     }
 
-    // contenu entier
+    /**
+     *  contenu
+     **/
     public function getContent(): string
     {
-        return ((string)$this->post->content);
+        return ((string)$this->content);
     }
 
-    // retourne le nombre total de posts dans la table post
-    public function getNbPost(): int
-    {
-        return ($this->executeQuery('SELECT count(id) FROM post')->fetch()[0]);
-    }
-
-    // retourne tous les articles d'une page de $perPage articles à partir de l'article $offset
-    public function getPosts(int $perPage, int $offset): object
-    {
-        $posts = (object)$this->executeQuery("SELECT * FROM post 
-        ORDER BY id 
-        LIMIT {$perPage} 
-        OFFSET {$offset}")
-            ->fetchAll(\PDO::FETCH_OBJ);
-
-        return ($posts);
-    }
-
-    // retourne un article recherché par son id
-    public function getPost(int $id): object
-    {
-        $this->post = (object)$this->executeQuery("SELECT * FROM post 
-        WHERE id = {$id}")
-            ->fetch(\PDO::FETCH_OBJ);
-
-        return ($this->post);
-    }
+    
 }

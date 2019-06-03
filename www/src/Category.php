@@ -1,51 +1,28 @@
 <?php
 namespace App;
-require_once 'Modele.php';
 
 // Classe Category : une catégorie du blog
-class Category extends Modele
+class Category 
 {
-     private $category;
-    public function __construct(object $Category = null)
-    {
-        $this->category = $Category;
-    }
+    private $id;
+    private $name;
+    private $slug;
 
     // slug
     public function getSlug(): string
     {
-        return ((string)$this->category->slug);
+        return ($this->slug);
     }
 
     // name
     public function getName(): string
     {
-        return ((string)$this->category->name);
+        return ($this->name);
     }
 
     // id
-    public function getId(): string
+    public function getId(): int
     {
-        return ((string)$this->category->id);
-    }
-
-    // retourne les catégories
-    public function getCategories(): object
-    {
-        $categories = (object)$this->executeQuery(
-            "SELECT * FROM category"
-        )
-            ->fetchAll(\PDO::FETCH_OBJ);
-        return ($categories);
-    }
-
-    // retourne la catégories recherchée par son id
-    public function getCategory(int $id): object
-    {
-        $this->category = (object)$this->executeQuery(
-            "SELECT * FROM category WHERE id = {$id}"
-        )
-            ->fetch(\PDO::FETCH_OBJ);
-        return ($this->category);
+        return ($this->id);
     }
 }
