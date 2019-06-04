@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title><?= $title ? 'Mon blog | ' . $title : 'Mon site' ?></title>
 </head>
+
 <body class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="/">Navbar</a>
@@ -33,22 +32,27 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+            <input id="searchSaisie" class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button id="searchButton" class="btn btn-secondary my-2 my-sm-0" type="button">Search</button>
+</form>
         </div>
     </nav>
     <section class="bg-light mb-2 mt-3 p-5" style="min-height:100vh">
         <header class="jumbotron  mb-5">
             <h1 class="text-center display-4"><?= $title ?? 'Mon site' ?></h1>
         </header>
-        <?= $content ?>
+        <section id="contenu">
+            <?= $content ?>
+        </section>
     </section>
     <footer class="footer bg-dark fixed-bottom py-1">
         <div class="text-center">
             <span class="text-white">by julien</span>
         </div>
     </footer>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <script src="/assets/js/script.js"></script>
 </body>
 
 </html>
