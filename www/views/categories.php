@@ -1,4 +1,6 @@
 <?php
+use App\Model\CategoryTable;
+
 /**
  * fichier qui génère la vue pour l'url /categories
  * 
@@ -6,7 +8,7 @@
 $title = "Catégories";
 
 // Connexion à la base
-$categoryTable = new App\CategoryTable();
+$categoryTable = new CategoryTable();
 
 // lecture des catégories dans la base 
 $categories = $categoryTable->getCategories();

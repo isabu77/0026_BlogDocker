@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\Model;
 
 // Classe principale d'accès à la base de données (singleton)
 class Connect

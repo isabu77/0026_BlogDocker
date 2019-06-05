@@ -1,5 +1,6 @@
 <?php
-/**
+use App\Model\PostTable;
+/*
  * fichier qui génère la vue pour l'url /article/[i:id]
  * 
  */
@@ -9,7 +10,7 @@ $slug = $params['slug'];
 $title = "article " . $slug; */
 
 // Connexion à la base
-$postTable = new App\PostTable();
+$postTable = new PostTable();
 
 // lecture de l'article îd dans la base (objet Post)
 $post = $postTable->getPost($id);

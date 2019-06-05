@@ -1,5 +1,6 @@
 <?php
-
+use App\Model\PostTable;
+use App\Model\CategoryTable;
 /**
  * fichier qui génère la vue pour l'url /category/[i:id]
  * 
@@ -7,8 +8,8 @@
 $id = (int)$params['id'];
 
 // Connexion à la base
-$categoryTable = new App\CategoryTable();
-$postTable = new App\PostTable();
+$categoryTable = new CategoryTable();
+$postTable = new PostTable();
 
 // lecture de la catégorie îd dans la base (objet Category)
 $category = $categoryTable->getCategory($id);

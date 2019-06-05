@@ -1,4 +1,6 @@
 <?php
+
+use App\Model\PostTable;
 define ("GENERATE_TIME_START", microtime(true));
 
 $basepath = dirname(__dir__) . DIRECTORY_SEPARATOR; // contient /var/www/

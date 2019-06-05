@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace App\Model;
 
 /**
  *  Classe Post : un article du blog 

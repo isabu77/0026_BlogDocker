@@ -1,10 +1,12 @@
 <?php
+use App\Model\PostTable;
+
 /**
  * fichier qui génère la vue pour l'url /
  * 
  */
 
-$postTable = new App\PostTable();
+$postTable = new PostTable();
 $nbpost = $postTable->getNbPost();
 
 /* $pdo = new PDO(
