@@ -1,28 +1,39 @@
 <?php
 namespace App\Model;
 
-// Classe Category : une catégorie du blog
-class Category 
+/**
+ *  Classe Category : une catégorie du blog 
+ **/
+class Category
 {
     private $id;
     private $name;
     private $slug;
 
-    // slug
-    public function getSlug(): string
-    {
-        return ($this->slug);
-    }
-
-    // name
-    public function getName(): string
-    {
-        return ($this->name);
-    }
-
-    // id
+    /**
+     *  id
+     *  @return int
+     **/
     public function getId(): int
     {
         return ($this->id);
+    }
+
+    /**
+     *  name
+     *  @return string
+     **/
+    public function getName(): string
+    {
+        return ((string)$this->name);
+    }
+
+    /**
+     *  slug
+     *  @return string
+     **/
+    public function getSlug(): string
+    {
+        return ($this->slug);
     }
 }

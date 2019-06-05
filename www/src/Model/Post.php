@@ -4,7 +4,7 @@ namespace App\Model;
 /**
  *  Classe Post : un article du blog 
  **/
-class Post 
+class Post
 {
     private $id;
     private $name;
@@ -14,7 +14,7 @@ class Post
 
     /**
      *  id
-     *  @return : int
+     *  @return int
      **/
     public function getId(): int
     {
@@ -22,47 +22,46 @@ class Post
     }
 
     /**
-     *  date de création
-     *  @return : string
-     **/
-    public function getCreatedAt(): string
-    {
-        return (new \DateTime($this->created_at))->format('d/m/Y h:i');
-    }
-
-    /**
-     *  slug
-     *  @return : string
-     **/
-    
-    public function getSlug(): string
-    {
-        return ((string)$this->slug);
-    }
-
-    /**
      *  name
-     *  @return : string
+     *  @return string
      **/
-    public function getName(): string
+    public function getName()
     {
         return ((string)$this->name);
     }
 
     /**
-     *  extrait du contenu
+     *  slug
+     *  @return string
+     **/
+
+    public function getSlug()
+    {
+        return ((string)$this->slug);
+    }
+
+    /**
+     *  date de création
+     *  @return  \DateTime
+     **/
+    public function getCreatedAt()
+    {
+        return (new \DateTime($this->created_at));
+    }
+    /**
+     *  date de création
      *  @return : string
      **/
-    public function getExcerptContent(): string
+    public function getCreatedAtDMY()
     {
-        return (substr($this->content, 0, 100));
+        return (new \DateTime($this->created_at))->format('d/m/Y h:i');
     }
 
     /**
      *  contenu
-     *  @return : string
+     *  @return string
      **/
-    public function getContent(): string
+    public function getContent()
     {
         return ((string)$this->content);
     }

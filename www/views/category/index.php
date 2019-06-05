@@ -1,6 +1,8 @@
 <?php
 use App\Model\PostTable;
 use App\Model\CategoryTable;
+use App\Helpers\Text;
+
 /**
  * fichier qui génère la vue pour l'url /category/[i:id]
  * 
@@ -53,12 +55,12 @@ $posts = $postTable->getPostsOfCategory($id, $perPage, $offset);
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Article <?= $post->getId() . "- ". $post->getName() ?></h5>
-                    <p class="card-text"><?= $post->getExcerptContent() ?>...</p>
+                    <h5 class="card-title">Article <?= $post->getId() . " - ". $post->getName() ?></h5>
+                    <p class="card-text"><?= Text::excerpt($post->getContent(), 100) ?></p>
                 </div>
-                <a href="/article/<?= $post->getId() ?>" class="text-center pb-2">lire plus</a>
-                <div class="card-footer text-muted">
-                    <?= ($post->getCreatedAt())   ?>
+                <a href="<?= $router->url('post', ['id' => $post->getId()]) ?>" class="text-center pb-2">lire plus</a>
+               <div class="card-footer text-muted">
+                    <?= ($post->getCreatedAtDMY())   ?>
                 </div>
             </div>
         </article>

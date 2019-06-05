@@ -17,7 +17,7 @@ $categories = $categoryTable->getCategories();
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-    <a href="/category/<?= $category->getId() ?>" ><li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li></a>
+    <a href="<?= $router->url('category', ['id' => $category->getId()]) ?>"><li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li></a>
     <?php endforeach; ?>
 </ul>
 

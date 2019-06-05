@@ -1,11 +1,13 @@
 <?php
 namespace App\Model;
 
-// Classe principale d'accès à la base de données (singleton)
+/**
+ * Classe principale d'accès à la base de données (singleton)
+ */
 class Connect
 {
     /**
-     * @var Connect
+     * @var $_instance
      * @access private
      * @static
      */
@@ -14,18 +16,9 @@ class Connect
     /**
      * @var pdo
      * @access private
-     * @private
+     * @static
      */
     private static $pdo;
-
-    /**
-     * Constructeur de la classe
-     *
-     * @param void
-     * @return void
-     */
-    private function __construct()
-    { }
 
     /**
      * Méthode qui crée l'unique instance de la classe
@@ -43,11 +36,13 @@ class Connect
 
         return self::$_instance;
     }
+
     /**
      *  retourne un objet PDO de connexion à la base
+     * @param void
+     * @return \PDO
      **/
-
-    private function getBdd(): object
+    private function getBdd(): \PDO
     {
         if ($this->pdo == null) {
             $this->pdo = new \PDO(
@@ -63,9 +58,11 @@ class Connect
 
     /**
      *  Exécute une requête SQL éventuellement paramétrée
+     * @param string $sql
+     * @param [] $params
+     * @return \PDO
      **/
-
-    public function executeQuery($sql, $params = null)
+    public function executeQuery(string $sql, $params = null)
     {
         if ($params == null) {
             $resultat = $this->getBdd()->query($sql);    // exécution directe

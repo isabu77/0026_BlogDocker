@@ -29,6 +29,8 @@ if (isset($_GET["page"]) && ((int)$_GET["page"] <= 1 || !is_int((int)$_GET["page
             throw new Exception('numero de page non valide ;) petit pirate');
         }
     }
+
+// définition des routes 
 $router = new App\Router($basepath . 'views');
 $router->get('/', 'index', 'home')
         ->get('/categories', 'categories', 'categories')

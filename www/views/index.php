@@ -1,5 +1,6 @@
 <?php
 use App\Model\PostTable;
+use App\Helpers\Text;
 
 /**
  * fichier qui génère la vue pour l'url /
@@ -8,17 +9,6 @@ use App\Model\PostTable;
 
 $postTable = new PostTable();
 $nbpost = $postTable->getNbPost();
-
-/* $pdo = new PDO(
-    "mysql:dbname=" .
-        getenv('MYSQL_DATABASE') . ";host=" .
-        getenv('MYSQL_HOST') . ";charset=UTF8",
-    getenv('MYSQL_USER'),
-    getenv('MYSQL_PASSWORD')
-);
-
-$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0]; */
-
 
 $perPage = 12;
 $nbPage = ceil($nbpost / $perPage);
@@ -32,14 +22,10 @@ if (isset($_GET["page"])) {
     $currentpage = 1;
 }
 $offset = ($currentpage - 1) * $perPage;
+
 // lecture des articles de la page dans la base
 $posts = $postTable->getPosts($perPage, $offset);
 
-/* $posts = $pdo->query("SELECT * FROM post 
-                    ORDER BY id 
-                    LIMIT {$perPage} 
-                    OFFSET {$offset}")
-    ->fetchAll(PDO::FETCH_OBJ); */
 $title = 'Mon Super MEGA blog';
 ?>
 
@@ -53,12 +39,12 @@ $title = 'Mon Super MEGA blog';
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                <h5 class="card-title">Article <?= $post->getId() . "- ". $post->getName() ?></h5>
-                    <p class="card-text"><?= $post->getExcerptContent() ?>...</p>
+                <h5 class="card-title">Article <?= $post->getId() . " - ". $post->getName() ?></h5>
+                    <p class="card-text"><?= Text::excerpt($post->getContent(), 100) ?></p>
                 </div>
-                <a href="/article/<?= $post->getId() ?>" class="text-center pb-2">lire plus</a>
+                <a href="<?= $router->url('post', ['id' => $post->getId()]) ?>" class="text-center pb-2">lire plus</a>
                 <div class="card-footer text-muted">
-                    <?= ($post->getCreatedAt())   ?>
+                    <?= ($post->getCreatedAtDMY())   ?>
                 </div>
             </div>
         </article>

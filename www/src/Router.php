@@ -1,30 +1,52 @@
-<?php 
+<?php
 namespace App;
 
-class Router{
+class Router
+{
     private $router;
     private $viewPath;
-    public function __construct(string $viewPath) 
+
+    /**
+     * constructeur
+     */
+    public function __construct(string $viewPath)
     {
         $this->viewPath = $viewPath;
         $this->router = new \AltoRouter();
-
     }
 
-    public function get(string $uri, string $file, string $name):self
+    /**
+     * get
+     */
+    public function get(string $uri, string $file, string $name): self
     {
-        $this->router->map( 'GET', $uri, $file, $name);
-        return($this); // pour enchainer les get à l'appel
+        $this->router->map('GET', $uri, $file, $name);
+        return ($this); // pour enchainer les get à l'appel
 
     }
 
-    // regarde si une route matche dans les routes définies au-dessus
+    /**
+     * génère une url avec une route 
+     */
+    public function url(string $name, array  $params = []): string
+    {
+        return ($this->router->generate($name, $params));
+    }
+
+    /**
+     * lance la route qui matche
+     */
     public function run(): void
     {
         $match = $this->router->match();
+
+        // on définit une variable avec l'instance pour appeler url() 
+        // dans toutes les vues qui sont incluses ci-dessous (dans le dossier views)
+        $router = $this;
+
         ob_start(); // démarre le cache
         if (is_array($match)) {
-             $params = $match['params'];
+            $params = $match['params'];
             require $this->pathToFile($match['target']);
         } else {
             // no route was matched
@@ -34,6 +56,10 @@ class Router{
         $content = ob_get_clean(); // récupère le html du cache
         require $this->pathToFile("layout/default");
     }
+
+    /**
+     * 
+     */
     private function pathToFile(string $file): string
     {
         return $this->viewPath . DIRECTORY_SEPARATOR . $file . '.php';
