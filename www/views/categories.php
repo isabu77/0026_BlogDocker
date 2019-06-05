@@ -15,6 +15,7 @@ $categories = $categoryTable->getCategories();
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-         <li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li>
+    <a href="/category/<?= $category->getId() ?>" ><li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li></a>
     <?php endforeach; ?>
 </ul>
+

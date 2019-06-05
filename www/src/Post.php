@@ -12,13 +12,18 @@ class Post
     private $created_at;
     private $content;
 
-    // id
+    /**
+     *  id
+     *  @return : int
+     **/
     public function getId(): int
     {
         return ($this->id);
     }
-       /**
+
+    /**
      *  date de création
+     *  @return : string
      **/
     public function getCreatedAt(): string
     {
@@ -27,6 +32,7 @@ class Post
 
     /**
      *  slug
+     *  @return : string
      **/
     
     public function getSlug(): string
@@ -36,6 +42,7 @@ class Post
 
     /**
      *  name
+     *  @return : string
      **/
     public function getName(): string
     {
@@ -44,6 +51,7 @@ class Post
 
     /**
      *  extrait du contenu
+     *  @return : string
      **/
     public function getExcerptContent(): string
     {
@@ -52,6 +60,7 @@ class Post
 
     /**
      *  contenu
+     *  @return : string
      **/
     public function getContent(): string
     {

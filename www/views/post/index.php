@@ -3,7 +3,7 @@
  * fichier qui génère la vue pour l'url /article/[i:id]
  * 
  */
-$id = $params['id'];
+$id = (int)$params['id'];
 /*
 $slug = $params['slug'];
 $title = "article " . $slug; */

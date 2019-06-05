@@ -1,27 +1,28 @@
 <?php
+
 /**
- * fichier qui génère la vue pour l'url /
+ * fichier qui génère la vue pour l'url /category/[i:id]
  * 
  */
+$id = (int)$params['id'];
 
+// Connexion à la base
+$categoryTable = new App\CategoryTable();
 $postTable = new App\PostTable();
-$nbpost = $postTable->getNbPost();
 
-/* $pdo = new PDO(
-    "mysql:dbname=" .
-        getenv('MYSQL_DATABASE') . ";host=" .
-        getenv('MYSQL_HOST') . ";charset=UTF8",
-    getenv('MYSQL_USER'),
-    getenv('MYSQL_PASSWORD')
-);
+// lecture de la catégorie îd dans la base (objet Category)
+$category = $categoryTable->getCategory($id);
 
-$nbpost = $pdo->query('SELECT count(id) FROM post')->fetch()[0]; */
+$title = "Catégorie : " . $category->getName();
 
+// nb d'articles de la catégorie $id
+$nbpost = $postTable->getNbPostOfCategory($id);
 
-$perPage = 12;
+$perPage = 8;
 $nbPage = ceil($nbpost / $perPage);
+
 if ((int)$_GET["page"] > $nbPage) {
-    header('location: /');
+    header('location: /category/?1');
     exit();
 }
 if (isset($_GET["page"])) {
@@ -30,16 +31,16 @@ if (isset($_GET["page"])) {
     $currentpage = 1;
 }
 $offset = ($currentpage - 1) * $perPage;
-// lecture des articles de la page dans la base
-$posts = $postTable->getPosts($perPage, $offset);
 
-/* $posts = $pdo->query("SELECT * FROM post 
-                    ORDER BY id 
-                    LIMIT {$perPage} 
-                    OFFSET {$offset}")
-    ->fetchAll(PDO::FETCH_OBJ); */
-$title = 'Mon Super MEGA blog';
+
+// lecture des articles de la page dans la base
+$posts = $postTable->getPostsOfCategory($id, $perPage, $offset);
+
+
 ?>
+
+<p>Catégorie <big><?= $id ?></big></p>
+<p>Slug : <big><?= $category->getSlug() ?></big></p>
 
 <?php if (null !== $message) : ?>
     <div class="alert-message">
@@ -51,7 +52,7 @@ $title = 'Mon Super MEGA blog';
         <article class="col-3 mb-4 d-flex align-items-stretch">
             <div class="card">
                 <div class="card-body">
-                <h5 class="card-title">Article <?= $post->getId() . "- ". $post->getName() ?></h5>
+                    <h5 class="card-title">Article <?= $post->getId() . "- ". $post->getName() ?></h5>
                     <p class="card-text"><?= $post->getExcerptContent() ?>...</p>
                 </div>
                 <a href="/article/<?= $post->getId() ?>" class="text-center pb-2">lire plus</a>
@@ -67,7 +68,7 @@ $title = 'Mon Super MEGA blog';
         <?php for ($i = 1; $i <= $nbPage; $i++) : ?>
             <?php $class = $currentpage == $i ? " active" : ""; ?>
             <?php $uri = $i == 1 ? "" : "?page=" . $i; ?>
-            <li class="page-item<?= $class ?>"><a class="page-link" href="/<?= $uri ?>"><?= $i ?></a></li>
+            <li class="page-item<?= $class ?>"><a class="page-link" href="/category/<?=$id?>/<?= $uri ?>"><?= $i ?></a></li>
         <?php endfor ?>
     </ul>
 </nav>

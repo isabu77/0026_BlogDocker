@@ -1,5 +1,6 @@
 .env
 www/vendor
 blog.code-workspace
+createBlog.sql
 
 

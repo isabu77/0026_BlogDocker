@@ -33,7 +33,7 @@
             </ul>
             <form class="form-inline my-2 my-lg-0">
             <input id="searchSaisie" class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button id="searchButton" class="btn btn-secondary my-2 my-sm-0" type="button">Search</button>
+            <button id="searchButton" class="btn btn-secondary my-2 my-sm-0" type="button" onclick="search()">Search</button>
 </form>
         </div>
     </nav>
@@ -47,9 +47,19 @@
     </section>
     <footer class="footer bg-dark fixed-bottom py-1">
         <div class="text-center">
-            <span class="text-white">by julien</span>
-        </div>
-    </footer>
+            <?php
+            
+            if (getenv("ENV_DEV")){
+                $end = microtime(true);
+                $generationtime = number_format(($end - GENERATE_TIME_START)*1000, 2);
+                $debug = "page générée en " . $generationtime ." ms";
+            }
+            else{
+                $debug = "";
+            }
+            ?>
+            <span class="text-white">by julien -- <?= $debug ?>
+        </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
     <script src="/assets/js/script.js"></script>

@@ -33,7 +33,7 @@ class CategoryTable
     }
 
     /*
-     * retourne la catégories recherchée par son id
+     * retourne la catégorie recherchée par son id
      *  
      */
     public function getCategory(int $id): object
