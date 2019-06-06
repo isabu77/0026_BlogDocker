@@ -47,6 +47,22 @@ class PostTable
 
         return $posts;
     }
+
+    /**
+     *  retourne un article recherché par son id dans la table post
+     * @param int
+     * @return int
+     **/
+    public function getPost(int $id): Post
+    {
+        $statement = $this->connect->executeQuery("SELECT * FROM post 
+        WHERE id = {$id}");
+        $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
+        $post = $statement->fetch();
+
+        return ($post);
+    }
+
     /**
      *  retourne le nombre total de posts d'une catégorie dans la table post
      * @param int
@@ -78,19 +94,26 @@ class PostTable
 
         return $posts;
     }
-
     /**
-     *  retourne un article recherché par son id dans la table post
+     *  retourne toutes les catégories d'un article
+     * @param int
+     * @param int
      * @param int
      * @return int
      **/
-    public function getPost(int $id): Post
+    public function getCategoriesOfPost(int $idPost): array
     {
-        $statement = $this->connect->executeQuery("SELECT * FROM post 
-        WHERE id = {$id}");
-        $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
-        $post = $statement->fetch();
+        $statement = $this->connect->executeQuery(
+            "SELECT c.id, c.slug, c.name 
+            FROM post_category pc 
+            JOIN category c ON pc.category_id = c.id 
+            WHERE pc.post_id = {$idPost}
+            ORDER BY id 
+            "
+        );
+        $statement->setFetchMode(\PDO::FETCH_CLASS, Category::class);
+        $categories = $statement->fetchAll();
 
-        return ($post);
+        return $categories;
     }
 }
