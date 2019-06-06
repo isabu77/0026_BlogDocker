@@ -1,6 +1,6 @@
 <?php
-
 use App\Model\PostTable;
+
 define ("GENERATE_TIME_START", microtime(true));
 
 $basepath = dirname(__dir__) . DIRECTORY_SEPARATOR; // contient /var/www/
@@ -35,7 +35,7 @@ $router = new App\Router($basepath . 'views');
 $router->get('/', 'index', 'home')
         ->get('/categories', 'categories', 'categories')
         ->get('/contact', 'contact', 'contact')
-        ->get('/article/[i:id]', 'post/index', 'post')
+        ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
         ->get('/category/[i:id]', 'category/index', 'category')
         ->get('/category/[i:id]/', 'category/index', 'categorypage')
         ->run();

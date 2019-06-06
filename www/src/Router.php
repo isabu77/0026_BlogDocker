@@ -21,7 +21,7 @@ class Router
     public function get(string $uri, string $file, string $name): self
     {
         $this->router->map('GET', $uri, $file, $name);
-        return ($this); // pour enchainer les get à l'appel
+        return $this; // pour enchainer les get à l'appel
 
     }
 
@@ -30,7 +30,7 @@ class Router
      */
     public function url(string $name, array  $params = []): string
     {
-        return ($this->router->generate($name, $params));
+        return $this->router->generate($name, $params);
     }
 
     /**
@@ -44,7 +44,8 @@ class Router
         // dans toutes les vues qui sont incluses ci-dessous (dans le dossier views)
         $router = $this;
 
-        ob_start(); // démarre le cache
+        ob_start(); // démarre le TAMPON
+
         if (is_array($match)) {
             $params = $match['params'];
             require $this->pathToFile($match['target']);

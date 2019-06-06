@@ -42,7 +42,7 @@ $title = 'Mon Super MEGA blog';
                 <h5 class="card-title">Article <?= $post->getId() . " - ". $post->getName() ?></h5>
                     <p class="card-text"><?= Text::excerpt($post->getContent(), 100) ?></p>
                 </div>
-                <a href="<?= $router->url('post', ['id' => $post->getId()]) ?>" class="text-center pb-2">lire plus</a>
+                <a href="<?= $router->url('post', ['id' => $post->getId(), 'slug' => $post->getSlug()]) ?>" class="text-center pb-2">lire plus</a>
                 <div class="card-footer text-muted">
                     <?= ($post->getCreatedAtDMY())   ?>
                 </div>

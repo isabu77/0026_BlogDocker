@@ -1,6 +1,8 @@
 <?php
 namespace App\Model;
 
+use Symfony\Component\VarDumper\Caster\ExceptionCaster;
+
 /**
  *  Classe PostTable : accès à la table post 
  **/
@@ -58,8 +60,14 @@ class PostTable
         $statement = $this->connect->executeQuery("SELECT * FROM post 
         WHERE id = {$id}");
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
+        /**
+         * @var Post|false
+         */        
         $post = $statement->fetch();
 
+        if (!$post) {
+            throw new \exception("Aucun article ne correspond à cet Id");
+        }
         return ($post);
     }
 
@@ -84,8 +92,15 @@ class PostTable
      **/
     public function getPostsOfCategory(int $idCategory, int $perPage, int $offset): array
     {
-        $statement = $this->connect->executeQuery("SELECT * FROM post 
+        /*         SELECT * FROM post 
         WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
+ */
+        $statement = $this->connect->executeQuery("
+        SELECT p.id, p.slug, p.name , p.content, p.created_at
+            FROM post_category pc 
+            JOIN post p ON pc.post_id = p.id 
+            WHERE pc.category_id = {$idCategory}
+
         LIMIT {$perPage} 
         OFFSET {$offset}
         ");
@@ -108,7 +123,7 @@ class PostTable
             FROM post_category pc 
             JOIN category c ON pc.category_id = c.id 
             WHERE pc.post_id = {$idPost}
-            ORDER BY id 
+            ORDER BY c.id 
             "
         );
         $statement->setFetchMode(\PDO::FETCH_CLASS, Category::class);
