@@ -1,6 +1,6 @@
 <?php
 namespace App\Model;
-
+use App\Helpers\Text;
 /**
  *  Classe Post : un article du blog 
  **/
@@ -64,6 +64,14 @@ class Post
     public function getContent()
     {
         return ((string)$this->content);
+    }
+    /**
+     *  contenu
+     *  @return string
+     **/
+    public function getExcerpt(int $lg):string
+    {
+        return htmlentities( Text::excerpt($this->content, $lg));
     }
 
     

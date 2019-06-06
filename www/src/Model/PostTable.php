@@ -65,9 +65,6 @@ class PostTable
          */        
         $post = $statement->fetch();
 
-        if (!$post) {
-            throw new \exception("Aucun article ne correspond à cet Id");
-        }
         return ($post);
     }
 
@@ -78,9 +75,11 @@ class PostTable
      **/
     public function getNbPostOfCategory(int $idCategory): int
     {
-        $statement = $this->connect->executeQuery("SELECT count(id) FROM post 
+        $statement = $this->connect->executeQuery("
+        SELECT count(category_id) FROM post_category WHERE  category_id = {$idCategory}");
+/*         SELECT count(id) FROM post 
          WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ");
-        return $statement->fetch()[0];
+ */        return $statement->fetch()[0];
     }
 
     /**
@@ -96,13 +95,18 @@ class PostTable
         WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
  */
         $statement = $this->connect->executeQuery("
-        SELECT p.id, p.slug, p.name , p.content, p.created_at
+/*         SELECT p.id, p.slug, p.name , p.content, p.created_at
             FROM post_category pc 
             JOIN post p ON pc.post_id = p.id 
             WHERE pc.category_id = {$idCategory}
-
-        LIMIT {$perPage} 
-        OFFSET {$offset}
+ */            
+            SELECT *
+            FROM post p 
+            JOIN post_category pc ON pc.post_id = p.id 
+            WHERE pc.category_id = {$idCategory}
+            ORDER BY created_at DESC
+            LIMIT {$perPage} 
+            OFFSET {$offset}
         ");
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
         $posts = $statement->fetchAll();

@@ -32,10 +32,9 @@ if (isset($_GET["page"]) && ((int)$_GET["page"] <= 1 || !is_int((int)$_GET["page
 
 // définition des routes 
 $router = new App\Router($basepath . 'views');
-$router->get('/', 'index', 'home')
-        ->get('/categories', 'categories', 'categories')
+$router->get('/', 'post/index', 'home')
+        ->get('/categories', 'category/index', 'categories')
         ->get('/contact', 'contact', 'contact')
-        ->get('/article/[*:slug]-[i:id]', 'post/index', 'post')
-        ->get('/category/[i:id]', 'category/index', 'category')
-        ->get('/category/[i:id]/', 'category/index', 'categorypage')
+        ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
+        ->get('/category/[*:slug]-[i:id]', 'category/show', 'category')
         ->run();

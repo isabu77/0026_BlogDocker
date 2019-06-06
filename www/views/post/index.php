@@ -1,49 +1,56 @@
 <?php
 use App\Model\PostTable;
-/*
- * fichier qui génère la vue pour l'url /article/[i:id]
+
+/**
+ * fichier qui génère la vue pour l'url /
  * 
  */
-$id = (int)$params['id'];
-$slug = $params['slug'];
 
-// Connexion à la base
+
+/** DEBUT ********************************************/
+// nb d'articles 
 $postTable = new PostTable();
+$nbpost = $postTable->getNbPost();
 
-// lecture de l'article îd dans la base (objet Post)
-/**
- * @var Post|false
- */
-$post = $postTable->getPost($id);
+$perPage = 12;
+$nbPage = ceil($nbpost / $perPage);
 
-// vérifier si on est sur le bon article avec le bon slug dans les paramètres de l'url demandée
- if ($post->getSlug() !== $slug){
-    $url = $router->url('post', ['id' => $id, 'slug' => $post->getSlug()]);
-    // code 301 : redirection permanente pour le navigateur (de son cache, plus de requete au serveur)
-    http_response_code(301);
-    header('Location:' . $url);
+if ((int)$_GET["page"] > $nbPage) {
+    header('location: /');
     exit();
 }
+if (isset($_GET["page"])) {
+    $currentpage = (int)$_GET["page"];
+} else {
+    $currentpage = 1;
+}
+$offset = ($currentpage - 1) * $perPage;
 
-$categories = $postTable->getCategoriesOfPost($id);
+// lecture des articles de la page dans la base
+$posts = $postTable->getPosts($perPage, $offset);
 
-$title = "Article " . $post->getName();
+/** FIN ******************************************** */
 
+$title = 'Mon Super MEGA blog';
 ?>
 
-<p>Article <big><?= $id ?></big></p>
-<p>Slug : <big><?= $post->getSlug() ?></big></p>
-
-<div class="text-muted text-center pb-5 mb-5">
-<p>Date : <big><?= $post->getCreatedAtDMY() ?></big></p>
-</div>
-
-<?php foreach ($categories as $key => $category) :
-    if ($key > 0) {
-        echo ', ';
+<?php if (null !== $message) : ?>
+    <div class="alert-message">
+        <?= $message ?>
+    </div>
+<?php endif ?>
+<section class="row">
+    <?php foreach ($posts as $post){
+        require 'card.php';
     }
-    $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]);
-    ?><a href="<?= $category_url ?>"><?= $category->getName() ?></a><?php
-                                                                endforeach ?>
-
-<p class="mx-4 text-justify"><?= nl2br(htmlspecialchars($post->getContent())) ?></p>
+  ?>
+</section>
+<nav class="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php for ($i = 1; $i <= $nbPage; $i++) : ?>
+            <?php $class = $currentpage == $i ? " active" : ""; ?>
+            <?php $uri = $i == 1 ? "" : "?page=" . $i; ?>
+            <li class="page-item<?= $class ?>"><a class="page-link" href="/<?= $uri ?>"><?= $i ?></a></li>
+        <?php endfor ?>
+    </ul>
+</nav>
