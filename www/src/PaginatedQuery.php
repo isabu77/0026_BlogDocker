@@ -2,7 +2,7 @@
 namespace App;
 
 /**
- * classe PaginatedQuery : gestion d'une pagination de requête à la base (articles)
+ * classe PaginatedQuery : gestion d'une pagination de requête à la base (éléments d'une classe)
  */
 class PaginatedQuery
 {
@@ -31,23 +31,13 @@ class PaginatedQuery
      * @access private
      */
     private $perPage;
+   
     /**
-     * @var int 
+     * @var string
      * @access private
      */
-    private $nbPage;
-
-    /**
-     * @var int 
-     * @access private
-     */
-    private $currentpage;
-
-    /**
-     * @var class
-     * @access private
-     */
-    private $postTable;
+    private $instanceClasse;
+    
     /**
      * @var int 
      * @access private
@@ -65,50 +55,82 @@ class PaginatedQuery
         $this->url = $url;
         $this->id = $id;
         $this->perPage = $perPage;
-        $this->postTable = new $this->classe();  //  PostTable
+        $this->instanceClasse = new $this->classe();  //  instanceClasse
     }
 
     /**
-     * getContent : retourne la liste des éléments d'une page
+     * retourne le nb de pages
+     */
+    public function getPages()
+    {
+        $fct = $this->queryCount;
+        $nbItems = $this->instanceClasse->$fct($this->id);
+
+        return ceil($nbItems / $this->perPage);
+    }
+
+    /**
+     * retourne le nb de pages
+     */
+    public function getCurrentPage()
+    {
+        return URL::getPositiveInt('page', 1);
+    }
+
+    /**
+     * Retourne la liste des éléments d'une page
      * @param void
      * @return array
      */
-    public function getItems():?array
+    public function getItems(): ?array
     {
-         // nb d'articles de la catégorie $id
-        $fct = $this->queryCount;
-        $nbpost = $this->postTable->$fct($this->id);
+        $currentPage = $this->getCurrentPage();
 
-        $this->nbPage = ceil($nbpost / $this->perPage);
-        if ((int)$_GET["page"] > $this->nbPage) {
-            return null;
+        if ($currentPage > $this->getPages()) {
+            // page inexistante : page 1
+            //throw new \Exception ("pas de page");
+            header('location: ' . $this->url);
+            exit();
         }
 
-        if (isset($_GET["page"])) {
-            $this->currentpage = (int)$_GET["page"];
-        } else {
-            $this->currentpage = 1;
-        }       
-        $offset = ($this->currentpage - 1) * $this->perPage;
- 
-        // lecture des articles de la page dans la base
+        $offset = ($currentPage - 1) * $this->perPage;
+
+        // lecture des éléments de la page dans la base
         $fct = $this->query;
-        return $this->postTable->$fct($this->perPage, $offset, $this->id);
+        return $this->instanceClasse->$fct($this->perPage, $offset, $this->id);
     }
 
     /**
-     * getNavHTML : affiche le menu de pagination en html
+     * Retourne les lignes du menu de pagination en html
      * @param void
-     * @return void
+     * @return string
      */
-    public function getNavHTML(){
+    public function getNavHTML(): string
+    {
+        $navHtml = "";
+        $currentPage = $this->getCurrentPage();
 
-        for ($i = 1; $i <= $this->nbPage; $i++){
-            $class = $this->currentpage == $i ? " active" : "";
-            $url = $i == 1 ? $this->url : $this->url . "?page=" . $i; 
-        
-            echo '<li class="page-item'. $class .'"><a class="page-link" href="'. $url .'">'. $i .'</a></li>';
+        for ($i = 1; $i <= $this->getPages(); $i++) {
+            $class = $currentPage == $i ? " active" : "";
+            $url = $i == 1 ? $this->url : $this->url . "?page=" . $i;
+
+            $navHtml .= '<li class="page-item' . $class . '"><a class="page-link" href="' . $url . '">' . $i . '</a></li>';
         }
+        return $navHtml;
+    }
 
+    /**
+     * retourne un tableau [noPage => url, ...] de pages
+     * @param void
+     * @return [noPage => url, ...] 
+     */
+    public function getNav(): array
+    {
+        $navArray = [];
+        for ($i = 1; $i <= $this->getPages(); $i++) {
+            $url = $i == 1 ? $this->url : $this->url . "?page=" . $i;
+            $navArray[$i] = $url;
+        }
+        return $navArray;
     }
 }

@@ -32,8 +32,12 @@ $title = 'Mon Super MEGA blog';
 </section>
 <nav class="Page navigation">
     <ul class="pagination justify-content-center">
-        <?php
-        $paginatedQuery->getNavHTML();
-        ?>
-    </ul>
+        <?php 
+            $navArray = $paginatedQuery->getNav();
+            $currentPage = $paginatedQuery->getCurrentPage();
+            for ($i = 1; $i <= count($navArray); $i++) :  ?>
+        <?php $class = $currentPage == $i ? " active" : ""; ?>	       
+        <?php $uri = $i == 1 ? "" : "?page=" . $i; ?>	        
+            <li class="page-item<?= $class ?>"><a class="page-link" href="/<?= $uri ?>"><?= $i ?></a></li>	
+        <?php endfor ?>	
 </nav>

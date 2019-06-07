@@ -32,12 +32,6 @@ if ($category->getSlug() !== $slug) {
 $paginatedQuery = new PaginatedQuery('getNbPost', 'getPosts', 'App\Model\PostTable', $uri, $category->getId());
 $posts = $paginatedQuery->getItems();
 
-if ($posts == null) {
-    // page inexistante : page 1
-    header('location: /category/' . $uri);
-    exit();
-}
-
 $title = "Catégorie " . $category->getId() . " : " . $category->getName();
 
 ?>
@@ -67,8 +61,6 @@ $title = "Catégorie " . $category->getId() . " : " . $category->getName();
 ?>
 <nav class="Page navigation">
     <ul class="pagination justify-content-center">
-        <?php
-        $paginatedQuery->getNavHTML();
-        ?>
+        <?= $paginatedQuery->getNavHTML(); ?>
     </ul>
 </nav>
