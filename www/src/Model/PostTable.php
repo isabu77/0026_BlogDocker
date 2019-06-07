@@ -22,34 +22,57 @@ class PostTable
         $this->connect = Connect::getInstance();
     }
     /**
-     *  retourne le nombre total de posts dans la table post
-     * @param void
+     *  retourne le nombre total de posts d'une catégorie dans la table post
+     * @param int
      * @return int
+     *   SELECT count(id) FROM post 
+     *   WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ");
      **/
-    public function getNbPost(): int
+    public function getNbPost(int $idCategory = null): int
     {
-        return ($this->connect->executeQuery("SELECT count(id) FROM post")->fetch()[0]);
+        if ($idCategory === NULL) {
+            $statement = $this->connect->executeQuery("SELECT count(id) FROM post");
+        } else {
+            $statement = $this->connect->executeQuery("
+            SELECT count(category_id) FROM post_category WHERE  category_id = {$idCategory}");
+        }
+        return $statement->fetch()[0];
     }
 
     /**
-     * retourne tous les articles d'une page de $perPage articles à partir de l'article $offset
+     *  retourne tous les articles d'une catégorie dans la table post
      * @param int
      * @param int
-     * @return array
-     *  
-     */
-    public function getPosts(int $perPage, int $offset): array
+     * @param int
+     * @return int
+     **/
+    public function getPosts(int $perPage, int $offset, int $idCategory = null): array
     {
-        $statement = $this->connect->executeQuery("SELECT * FROM post 
-        ORDER BY id 
-        LIMIT {$perPage} 
-        OFFSET {$offset}");
+        /* SELECT * FROM post 
+        WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
+
+        SELECT p.id, p.slug, p.name , p.content, p.created_at
+            FROM post_category pc 
+            JOIN post p ON pc.post_id = p.id 
+            WHERE pc.category_id = {$idCategory}
+        */
+        if ($idCategory == null) {
+            $statement = $this->connect->executeQuery("SELECT * FROM post 
+            ORDER BY created_at DESC
+            LIMIT {$perPage} 
+            OFFSET {$offset}");
+        } else {
+            $statement = $this->connect->executeQuery("SELECT * FROM post as p 
+                JOIN post_category as pc ON pc.post_id = p.id 
+                WHERE pc.category_id = {$idCategory}
+                ORDER BY created_at DESC
+                LIMIT {$perPage} OFFSET {$offset} ");
+        }
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
-        $posts = $statement->fetchAll();
 
-        return $posts;
+        return $statement->fetchAll();
     }
-
+    
     /**
      *  retourne un article recherché par son id dans la table post
      * @param int
@@ -62,57 +85,12 @@ class PostTable
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
         /**
          * @var Post|false
-         */        
+         */
         $post = $statement->fetch();
 
         return ($post);
     }
 
-    /**
-     *  retourne le nombre total de posts d'une catégorie dans la table post
-     * @param int
-     * @return int
-     **/
-    public function getNbPostOfCategory(int $idCategory): int
-    {
-        $statement = $this->connect->executeQuery("
-        SELECT count(category_id) FROM post_category WHERE  category_id = {$idCategory}");
-/*         SELECT count(id) FROM post 
-         WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ");
- */        return $statement->fetch()[0];
-    }
-
-    /**
-     *  retourne tous les articles d'une catégorie dans la table post
-     * @param int
-     * @param int
-     * @param int
-     * @return int
-     **/
-    public function getPostsOfCategory(int $idCategory, int $perPage, int $offset): array
-    {
-        /*         SELECT * FROM post 
-        WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
- */
-        $statement = $this->connect->executeQuery("
-/*         SELECT p.id, p.slug, p.name , p.content, p.created_at
-            FROM post_category pc 
-            JOIN post p ON pc.post_id = p.id 
-            WHERE pc.category_id = {$idCategory}
- */            
-            SELECT *
-            FROM post p 
-            JOIN post_category pc ON pc.post_id = p.id 
-            WHERE pc.category_id = {$idCategory}
-            ORDER BY created_at DESC
-            LIMIT {$perPage} 
-            OFFSET {$offset}
-        ");
-        $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
-        $posts = $statement->fetchAll();
-
-        return $posts;
-    }
     /**
      *  retourne toutes les catégories d'un article
      * @param int
