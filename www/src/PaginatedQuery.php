@@ -31,13 +31,23 @@ class PaginatedQuery
      * @access private
      */
     private $perPage;
-   
+    /**
+     * @var int 
+     * @access private
+     */
+    private $nbItems;
     /**
      * @var string
      * @access private
      */
     private $instanceClasse;
-    
+
+    /**
+     * @var array
+     * @access private
+     */
+    private $items;
+
     /**
      * @var int 
      * @access private
@@ -61,12 +71,14 @@ class PaginatedQuery
     /**
      * retourne le nb de pages
      */
-    public function getPages()
+    public function getNbPages(): float
     {
-        $fct = $this->queryCount;
-        $nbItems = $this->instanceClasse->$fct($this->id);
+        if ($this->nbItems === null) {
+            $fct = $this->queryCount;
+            $this->nbItems = $this->instanceClasse->$fct($this->id);
+        }
 
-        return ceil($nbItems / $this->perPage);
+        return ceil($this->nbItems / $this->perPage);
     }
 
     /**
@@ -86,40 +98,23 @@ class PaginatedQuery
     {
         $currentPage = $this->getCurrentPage();
 
-        if ($currentPage > $this->getPages()) {
+        if ($currentPage > $this->getNbPages()) {
             // page inexistante : page 1
             //throw new \Exception ("pas de page");
             header('location: ' . $this->url);
             exit();
         }
+        if ($this->items === null) {
+            $offset = ($currentPage - 1) * $this->perPage;
 
-        $offset = ($currentPage - 1) * $this->perPage;
-
-        // lecture des éléments de la page dans la base
-        $fct = $this->query;
-        return $this->instanceClasse->$fct($this->perPage, $offset, $this->id);
-    }
-
-    /**
-     * Retourne les lignes du menu de pagination en html
-     * @param void
-     * @return string
-     */
-    public function getNavHTML(): string
-    {
-        $navHtml = "";
-        $currentPage = $this->getCurrentPage();
-
-        for ($i = 1; $i <= $this->getPages(); $i++) {
-            $class = $currentPage == $i ? " active" : "";
-            $url = $i == 1 ? $this->url : $this->url . "?page=" . $i;
-
-            $navHtml .= '<li class="page-item' . $class . '"><a class="page-link" href="' . $url . '">' . $i . '</a></li>';
+            // lecture des éléments de la page dans la base
+            $fct = $this->query;
+            $this->items =  $this->instanceClasse->$fct($this->perPage, $offset, $this->id);
         }
-        return $navHtml;
+        return ($this->items);
     }
 
-    /**
+        /**
      * retourne un tableau [noPage => url, ...] de pages
      * @param void
      * @return [noPage => url, ...] 
@@ -127,10 +122,30 @@ class PaginatedQuery
     public function getNav(): array
     {
         $navArray = [];
-        for ($i = 1; $i <= $this->getPages(); $i++) {
+        for ($i = 1; $i <= $this->getNbPages(); $i++) {
             $url = $i == 1 ? $this->url : $this->url . "?page=" . $i;
             $navArray[$i] = $url;
         }
         return $navArray;
     }
+    
+    /**
+     * Retourne les lignes du menu de pagination en html
+     * @param void
+     * @return string
+     */
+    public function getNavHTML(): string
+    {
+        $urls = $this->getNav();
+        $navHtml = "";
+        $currentPage = $this->getCurrentPage();
+
+        foreach ($urls as $key => $url) {
+            $class = $currentPage == $key ? " active" : "";
+            $navHtml .= "<li class='page-item{$class}'><a class='page-link' href='{$url}'>{$key}</a></li>";
+        }
+        return $navHtml;
+    }
+
+
 }
