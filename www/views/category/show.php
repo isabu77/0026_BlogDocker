@@ -10,9 +10,8 @@ $id = (int)$params['id'];
 $slug = $params['slug'];
 
 // Connexion à la base
-$categoryTable = new CategoryTable();
-
 // lecture de la catégorie îd dans la base (objet Category)
+$categoryTable = new CategoryTable();
 $category = $categoryTable->getCategory($id);
 
 if (!$category) {
@@ -29,6 +28,8 @@ if ($category->getSlug() !== $slug) {
     exit();
 }
 
+// Connexion à la base
+// lecture des articles de la catégorie par son îd dans la base 
 $paginatedQuery = new PaginatedQuery('getNbPost', 'getPosts', 'App\Model\PostTable', $uri, $category->getId());
 $posts = $paginatedQuery->getItems();
 
@@ -51,16 +52,5 @@ $title = "Catégorie " . $category->getId() . " : " . $category->getName();
     }
     ?>
 </section>
-<?php
-/**
- * 2 approches :
- * $pagination->getNavHTML();  --> html
- * OU
- * $pagination->getNav();  --> [i=>url, 2=>url]
- */
-?>
-<nav class="Page navigation">
-    <ul class="pagination justify-content-center">
-        <?= $paginatedQuery->getNavHTML(); ?>
-    </ul>
-</nav>
+
+<?= $paginatedQuery->getNavHTML(); ?>

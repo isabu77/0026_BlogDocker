@@ -1,5 +1,5 @@
 <?php
-use App\Model\CategoryTable;
+use App\PaginatedQuery;
 
 /**
  * fichier qui génère la vue pour l'url /categories
@@ -7,17 +7,26 @@ use App\Model\CategoryTable;
  */
 $title = "Catégories";
 
-// Connexion à la base
-$categoryTable = new CategoryTable();
-
 // lecture des catégories dans la base 
-$categories = $categoryTable->getCategories();
+
+$uri = $router->url("categories");
+$paginatedQuery = new PaginatedQuery('getNbCategory', 'getCategories', 'App\Model\CategoryTable', $uri, null,  6);
+$categories = $paginatedQuery->getItems();
+
+if ($categories == null) {
+    // page inexistante : page 1
+    header('Location:' . $uri);
+    exit();
+}
 
 ?>
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-    <a href="<?= $router->url('category', ['id' => $category->getId()]) ?>"><li>categorie <?= " " . $category->getId() . " - ". $category->getName() . " : " . $category->getSlug()?></li></a>
+        <a href="<?= $router->url('category', ['id' => $category->getId()]) ?>">
+            <li>categorie <?= " " . $category->getId() . " - " . $category->getName() . " : " . $category->getSlug() ?></li>
+        </a>
     <?php endforeach; ?>
 </ul>
 
+<?= $paginatedQuery->getNavHTML(); ?>

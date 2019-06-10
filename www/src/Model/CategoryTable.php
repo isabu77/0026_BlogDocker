@@ -36,10 +36,10 @@ class CategoryTable
      * @return array
      *  
      */
-    public function getCategories(): array
+    public function getCategories(int $perPage, int $offset): array
     {
         $categories = $this->connect->executeQuery(
-            "SELECT * FROM category"
+            "SELECT * FROM category LIMIT {$perPage} OFFSET {$offset}"
         )
             ->fetchAll(\PDO::FETCH_CLASS, Category::class);
         return ($categories);
