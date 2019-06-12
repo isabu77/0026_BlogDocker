@@ -34,7 +34,8 @@ if ($numPage !== null) {
 $router = new App\Router($basepath . 'views');
 $router->get('/', 'post/index', 'home')
     ->get('/categories', 'category/index', 'categories')
-    ->get('/contact', 'contact', 'contact')
+    ->get('/contact', 'contact/index', 'contact')
+    ->get('/about', 'about/index', 'about')
     ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
     ->get('/category/[*:slug]-[i:id]', 'category/show', 'category')
     ->run();

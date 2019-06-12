@@ -5,4 +5,4 @@
  */
 $title = "Contact";
 ?>
-page de contact
+<p> page de contact</p>

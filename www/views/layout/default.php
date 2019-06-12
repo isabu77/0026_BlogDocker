@@ -25,10 +25,10 @@
                     <a class="nav-link" href="/categories">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="/contact">Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="/about">About</a>
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0">
