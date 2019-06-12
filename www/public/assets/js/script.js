@@ -7,12 +7,10 @@ function search() {
     $('span').contents().unwrap();
 
     var content = $('#contenu').html();
-    offset = content.indexOf(texte);
-    if (offset >= 0) {
-        content = content.replace(re, span + texte + span2);
-        $('#contenu').html(content);
-    }
+    content = content.replace(re, span + '$&' + span2);
+    $('#contenu').html(content);
 
+    $("#searchSaisie").val("");
 }
 
 /* $("#searchSaisie").on("change", search); */
