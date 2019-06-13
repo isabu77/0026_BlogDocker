@@ -2,5 +2,6 @@
 www/vendor
 blog.code-workspace
 createBlog.sql
+www/tests/Exotest
 
 

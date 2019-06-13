@@ -23,8 +23,8 @@ if ($categories == null) {
 
 <ul>
     <?php foreach ($categories as $category) : ?>
-        <a href="<?= $router->url('category', ['id' => $category->getId()]) ?>">
-            <li>categorie <?= " " . $category->getId() . " - " . $category->getName() . " : " . $category->getSlug() ?></li>
+        <a href="<?= $router->url('category', ['id' => $category->getId(), "slug" => $category->getSlug()]) ?>">
+            <li>Categorie <?= " " . $category->getId() . " - " . $category->getName() ?></li>
         </a>
     <?php endforeach; ?>
 </ul>
