@@ -34,7 +34,7 @@ class TextTest extends TestCase{
     {
         $text = "EssenostrudsuntidtemporameteiusmodEssenostrudsuntidtemporameEssenostrudsunt";
         $this->assertEquals(
-            'EssenostrudsuntidtemporameteiusmodEs...', Text::excerpt($text, 50));
+            'EssenostrudsuntidtemporameteiusmodEssenostrudsunti...', Text::excerpt($text, 50));
     }
     public function testExcerptDefaultWithHTML()
     {
