@@ -11,6 +11,7 @@ class Post
     private $slug;
     private $created_at;
     private $content;
+    private $categories = [];
 
     /**
      *  id
@@ -72,6 +73,22 @@ class Post
     public function getExcerpt(int $lg):string
     {
         return htmlentities( Text::excerpt($this->content, $lg));
+    }
+    /**
+     *  catégories du post
+     *  @return string
+     **/
+    public function getCategories():Array
+    {
+        return $this->categories;
+    }
+/**
+     *  catégories du post
+     *  @return string
+     **/
+    public function setCategories(Array $categories)
+    {
+        $this->categories = $categories;
     }
 
     

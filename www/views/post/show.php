@@ -36,18 +36,18 @@ $title = "Article " . $post->getName();
 ?>
 
 <div class="text-muted text-center pb-5 mb-5">
-<p>Article <big><?= $id ?></big></p>
-<p>Slug : <big><?= $post->getSlug() ?></big></p>
+    <p>Article <big><?= $id ?></big></p>
+    <p>Slug : <big><?= $post->getSlug() ?></big></p>
 
-<p>Date : <big><?= $post->getCreatedAtDMY() ?></big></p>
+    <p>Date : <big><?= $post->getCreatedAtDMY() ?></big></p>
 
-<?php foreach ($categories as $key => $category) :
-    if ($key > 0) {
-        echo ', ';
-    }
-    $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]);
-    ?><a href="<?= $category_url ?>"><?= $category->getName() ?></a><?php
-                                                                endforeach ?>
+    <?php foreach ($categories as $key => $category) :
+        if ($key > 0) {
+            echo ', ';
+        }
+        $category_url = $router->url('category', ['id' => $category->getID(), 'slug' => $category->getSlug()]);
+        ?><a href="<?= $category_url ?>"><?= $category->getName() ?></a><?php
+    endforeach ?>
 </div>
 
 <p class="mx-4 text-justify"><?= nl2br(htmlspecialchars($post->getContent())) ?></p>

@@ -57,7 +57,7 @@ class PostTable
             WHERE pc.category_id = {$idCategory}
         */
         if ($idCategory == null) {
-            $statement = $this->connect->executeQuery("SELECT * FROM post 
+            $statement = $this->connect->executeQuery("SELECT * FROM post as p
             ORDER BY created_at DESC
             LIMIT {$perPage} 
             OFFSET {$offset}");
@@ -68,9 +68,15 @@ class PostTable
                 ORDER BY created_at DESC
                 LIMIT {$perPage} OFFSET {$offset} ");
         }
+        
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
 
-        return $statement->fetchAll();
+        $posts = $statement->fetchAll();
+        foreach ($posts as $post) {
+            $post->setCategories($this->getCategoriesOfPost($post->getId()));
+        }
+        return $posts;
+
     }
     
     /**
@@ -87,6 +93,7 @@ class PostTable
          * @var Post|false
          */
         $post = $statement->fetch();
+        $post->setCategories($this->getCategoriesOfPost($id));
 
         return ($post);
     }

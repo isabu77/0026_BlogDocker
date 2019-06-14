@@ -1,6 +1,7 @@
 <?php
 use App\PaginatedQuery;
 use App\Model\CategoryTable;
+use App\Model\PostTable;
 
 /**
  * fichier qui génère la vue pour l'url /category/[i:id]
@@ -13,6 +14,7 @@ $slug = $params['slug'];
 // lecture de la catégorie îd dans la base (objet Category)
 $categoryTable = new CategoryTable();
 $category = $categoryTable->getCategory($id);
+$postTable = new PostTable();
 
 if (!$category) {
     throw new \exception("Aucune catégorie ne correspond à cet Id");
@@ -48,6 +50,7 @@ $title = "Catégorie " . $category->getId() . " : " . $category->getName();
 <section class="row">
     <?php
     foreach ($posts as $post) {
+        //$categories = $postTable->getCategoriesOfPost($post->getId());
         require dirname(__DIR__) . '/post/card.php';
     }
     ?>
