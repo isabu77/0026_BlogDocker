@@ -1,6 +1,5 @@
 <?php
 use App\PaginatedQuery;
-use App\Model\PostTable;
 use App\Model\Post;
 use App\Connection;
 
@@ -46,7 +45,7 @@ foreach ($categories as $category) {
 
 //===========================================================================
 
-$title = 'Mon Super MEGA blog';
+$title = 'Mon Blog en MVC';
 ?>
 
 <?php if (null !== $message) : ?>
