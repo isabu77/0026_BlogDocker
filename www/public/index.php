@@ -1,11 +1,10 @@
 <?php
-use App\Model\PostTable;
 
-define("GENERATE_TIME_START", microtime(true));
-
+$start = microtime(true);
 $basepath = dirname(__dir__) . DIRECTORY_SEPARATOR; // contient /var/www/
 
 require_once $basepath . 'vendor/autoload.php';
+
 if (getenv("ENV_DEV")) {
     $whoops = new \Whoops\Run;
     $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
@@ -14,6 +13,7 @@ if (getenv("ENV_DEV")) {
 // $basepath = /var/www/
 
 $numPage = \App\URL::getPositiveInt("page");
+
 if ($numPage !== null) {
     if ($numPage == 1) {
         $uri = explode('?', $_SERVER["REQUEST_URI"])[0];
@@ -38,4 +38,5 @@ $router->get('/', 'post/index', 'home')
     ->get('/about', 'about/index', 'about')
     ->get('/article/[*:slug]-[i:id]', 'post/show', 'post')
     ->get('/category/[*:slug]-[i:id]', 'category/show', 'category')
+    ->get('/test', 'Twig#index', 'test')
     ->run();

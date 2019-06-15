@@ -51,7 +51,8 @@
             
             if (getenv("ENV_DEV")){
                 $end = microtime(true);
-                $generationtime = number_format(($end - GENERATE_TIME_START)*1000, 2);
+                global $start;
+                $generationtime = number_format(($end - $start)*1000, 2);
                 $debug = "page générée en " . $generationtime ." ms";
             }
             else{

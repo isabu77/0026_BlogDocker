@@ -82,13 +82,21 @@ class Post
     {
         return $this->categories;
     }
-/**
+    /**
      *  catégories du post
      *  @return string
      **/
     public function setCategories(Array $categories)
     {
         $this->categories = $categories;
+    }
+    /**
+     *  catégories du post
+     *  @return string
+     **/
+    public function setCategory($category)
+    {
+        $this->categories[] = $category;
     }
 
     

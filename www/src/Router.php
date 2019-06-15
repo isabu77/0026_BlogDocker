@@ -47,7 +47,14 @@ class Router
         ob_start(); // démarre le TAMPON
 
         if (is_array($match)) {
-            $params = $match['params'];
+            if (strpos($match['target'], "#")) {
+                [$controller, $methode] = explode("#", $match['target']);
+                $controller = "App\\Controller\\".ucfirst($controller)."Controller";
+                ob_get_clean();
+                (new $controller())->$methode();
+                exit();
+            }
+            $params = $match['params'];	
             require $this->pathToFile($match['target']);
         } else {
             // no route was matched
