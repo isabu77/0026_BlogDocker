@@ -19,14 +19,10 @@ if ($categories == null) {
     exit();
 }
 
-?>
-
-<ul>
-    <?php foreach ($categories as $category) : ?>
-        <a href="<?= $router->url('category', ['id' => $category->getId(), "slug" => $category->getSlug()]) ?>">
-            <li>Categorie <?= " " . $category->getId() . " - " . $category->getName() ?></li>
-        </a>
-    <?php endforeach; ?>
-</ul>
-
-<?= $paginatedQuery->getNavHTML(); ?>
+echo "<ul>";
+foreach ($categories as $category) {
+    $url = $router->url('category', ['id' => $category->getId(), "slug" => $category->getSlug()]);
+    echo "<li><a href=\"{$url}\">{$category->getName()}</a></li>";
+}
+echo "</ul>";
+echo $paginatedQuery->getNavHtml();

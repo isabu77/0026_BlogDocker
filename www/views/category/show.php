@@ -1,12 +1,10 @@
 <?php
 use App\PaginatedQuery;
 use App\Model\CategoryTable;
-use App\Model\Post;
-use App\Connection;
 
 /**
  * fichier qui génère la vue pour l'url /category/[i:id]
- * 
+ * (Lire plus...)
  */
 $id = (int)$params['id'];
 $slug = $params['slug'];
@@ -41,29 +39,14 @@ $uri = $router->url("category", ["id" => $category->getId(), "slug" => $category
 $paginatedQuery = new PaginatedQuery('getNbPost', 'getPosts', 'App\Model\PostTable', $uri, $category->getId());
 $posts = $paginatedQuery->getItems();
 
-//============= correction JULIEN ======================================== 
-// tableau des ids des articles
-$ids = array_map(function (Post $post) {
-    return $post->getId();
-}, $posts);
-$categories = Connection::getPDO()
-->query("SELECT c.*, pc.post_id
-        FROM post_category pc 
-        LEFT JOIN category c on pc.category_id = c.id
-        WHERE post_id IN (" . implode(', ', $ids) . ")")
-->fetchAll(\PDO::FETCH_CLASS, \App\Model\Category::class);
-
-// puis tableau des ids des posts triés par id contenant l'objet Post
-$postById = [];
-foreach ($posts as $post) {
-    $postById[$post->getId()] = $post;
-}
-
-// puis on remplit la propriété de chaque post du tableau précédent 
-foreach ($categories as $category) {
-    $postById[$category->post_id]->setCategory($category);
-}
-//===========================================================================
+/**
+ *  @var $postById
+ * Tableau d'objets Post
+ * dont la propriété  $catégories est lue dans la base
+ *  
+ */
+ 
+$postById = $categoryTable::getCategoriesOfPosts($posts);
 
 ?>
 
@@ -76,12 +59,12 @@ foreach ($categories as $category) {
 <?php endif ?>
 
 <section class="row">
-    <?php
-    foreach ($posts as $post) {
-        //$categories = $postTable->getCategoriesOfPost($post->getId());
+    <?php /** @var Post::class $post */
+    foreach ($postById as $post) {
         require dirname(__DIR__) . '/post/card.php';
     }
     ?>
 </section>
 
-<?= $paginatedQuery->getNavHTML(); ?>
+<?php
+echo $paginatedQuery->getNavHTML(); 

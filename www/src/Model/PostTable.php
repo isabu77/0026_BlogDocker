@@ -102,10 +102,7 @@ class PostTable
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
 
         $posts = $statement->fetchAll();
-        /*
-        foreach ($posts as $post) {
-            $post->setCategories($this->getCategoriesOfPost($post->getId()));
-        } */
+
         return $posts;
     }
 
@@ -150,4 +147,6 @@ class PostTable
 
         return $categories;
     }
+
+    
 }

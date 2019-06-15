@@ -53,16 +53,15 @@
                 $end = microtime(true);
                 global $start;
                 $generationtime = number_format(($end - $start)*1000, 2);
-                $debug = "page générée en " . $generationtime ." ms";
+                $debug = " - Page générée en " . $generationtime ." ms";
             }
             else{
                 $debug = "";
             }
             ?>
-            <span class="text-white">by Isa -- <?= $debug ?>
+            <span class="text-white">by Isa<?= $debug ?></span>
         </footer>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
     <script src="/assets/js/script.js"></script>
 </body>
 
