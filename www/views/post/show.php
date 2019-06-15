@@ -7,13 +7,11 @@ use App\Model\PostTable;
 $id = (int)$params['id'];
 $slug = $params['slug'];
 
-// Connexion à la base
-$postTable = new PostTable();
-
-// lecture de l'article îd dans la base (objet Post)
+// lecture de l'article dans la base (objet Post) par son id
 /**
  * @var Post|false
  */
+$postTable = PostTable::getInstance();
 $post = $postTable->getPost($id);
 
 if (!$post) {

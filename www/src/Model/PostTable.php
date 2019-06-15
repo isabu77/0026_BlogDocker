@@ -9,18 +9,47 @@ use Symfony\Component\VarDumper\Caster\ExceptionCaster;
 class PostTable
 {
     /**
+     * L'objet unique PostTable
+     * @var $_instance
+     * @access private
+     * @static
+     */
+    private static $_instance = null;
+
+    /**
      * @var connect
      * @access private
      */
-    private $connect;
+    private static $_connect = null;
 
     /**
-     *  constructeur
-     **/
-    public function __construct()
+     * Constructeur de la classe
+     *
+     * @return void
+     * @access private
+     */
+    private function __construct()
     {
-        $this->connect = Connect::getInstance();
+        if (self::$_connect == null)
+            self::$_connect = Connect::getInstance();
     }
+
+    /**
+     * Méthode qui crée l'unique instance de la classe
+     * si elle n'existe pas encore puis la retourne.
+     *
+     * @param void
+     * @return PostTable
+     */
+    public static function getInstance()
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new PostTable();
+        }
+
+        return self::$_instance;
+    }
+
     /**
      *  retourne le nombre total de posts d'une catégorie dans la table post
      * @param int
@@ -28,12 +57,12 @@ class PostTable
      *   SELECT count(id) FROM post 
      *   WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ");
      **/
-    public function getNbPost(int $idCategory = null): int
+    public static function getNbPost(int $idCategory = null): int
     {
         if ($idCategory === NULL) {
-            $statement = $this->connect->executeQuery("SELECT count(id) FROM post");
+            $statement = self::$_connect->executeQuery("SELECT count(id) FROM post");
         } else {
-            $statement = $this->connect->executeQuery("
+            $statement = self::$_connect->executeQuery("
             SELECT count(category_id) FROM post_category WHERE  category_id = {$idCategory}");
         }
         return $statement->fetch()[0];
@@ -46,7 +75,7 @@ class PostTable
      * @param int
      * @return int
      **/
-    public function getPosts(int $perPage, int $offset, int $idCategory = null): array
+    public static function getPosts(int $perPage, int $offset, int $idCategory = null): array
     {
         /* SELECT * FROM post 
         WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
@@ -56,19 +85,20 @@ class PostTable
             JOIN post p ON pc.post_id = p.id 
             WHERE pc.category_id = {$idCategory}
         */
+
         if ($idCategory == null) {
-            $statement = $this->connect->executeQuery("SELECT * FROM post as p
+            $statement = self::$_connect->executeQuery("SELECT * FROM post as p
             ORDER BY created_at DESC
             LIMIT {$perPage} 
             OFFSET {$offset}");
         } else {
-            $statement = $this->connect->executeQuery("SELECT * FROM post as p 
+            $statement = self::$_connect->executeQuery("SELECT * FROM post as p 
                 JOIN post_category as pc ON pc.post_id = p.id 
                 WHERE pc.category_id = {$idCategory}
                 ORDER BY created_at DESC
                 LIMIT {$perPage} OFFSET {$offset} ");
         }
-        
+
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
 
         $posts = $statement->fetchAll();
@@ -77,24 +107,23 @@ class PostTable
             $post->setCategories($this->getCategoriesOfPost($post->getId()));
         } */
         return $posts;
-
     }
-    
+
     /**
      *  retourne un article recherché par son id dans la table post
      * @param int
      * @return int
      **/
-    public function getPost(int $id): Post
+    public static function getPost(int $id): Post
     {
-        $statement = $this->connect->executeQuery("SELECT * FROM post 
+        $statement = self::$_connect->executeQuery("SELECT * FROM post 
         WHERE id = {$id}");
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
         /**
          * @var Post|false
          */
         $post = $statement->fetch();
-        $post->setCategories($this->getCategoriesOfPost($id));
+        $post->setCategories(self::getCategoriesOfPost($id));
 
         return ($post);
     }
@@ -106,9 +135,9 @@ class PostTable
      * @param int
      * @return int
      **/
-    public function getCategoriesOfPost(int $idPost): array
+    public static function getCategoriesOfPost(int $idPost): array
     {
-        $statement = $this->connect->executeQuery(
+        $statement = self::$_connect->executeQuery(
             "SELECT c.id, c.slug, c.name 
             FROM post_category pc 
             JOIN category c ON pc.category_id = c.id 

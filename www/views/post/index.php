@@ -11,19 +11,12 @@ use App\Connection;
 $uri = $router->url("home");
 $paginatedQuery = new PaginatedQuery('getNbPost', 'getPosts', 'App\Model\PostTable', $uri);
 $posts = $paginatedQuery->getItems();
-$postTable = new PostTable();
 
 if ($posts == null) {
     // page inexistante : page 1
     header('location: /');
     exit();
 }
-
-// remplit le tableau des catégories dans chaque objet $post
-/* foreach ($posts as $post) {
-    $categories = $postTable->getCategoriesOfPost($post->getId());
-    $post->setCategories($categories);
-} */
 
 //============= correction JULIEN ======================================== 
 // tableau des ids des articles

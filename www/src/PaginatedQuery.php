@@ -58,7 +58,7 @@ class PaginatedQuery
      * constructeur
      * @param string $queryCount : méthode Requête du nb d'items de la classe $classe
      * @param string $query : méthode Requête du tableau d'items de la classe $classe
-     * @param string $classe : classe contenant les 2 méthodes
+     * @param string $classe : classe contenant les 2 méthodes statiques
      * @param string $url : url de la page à afficher 
      * @param int $id : id de l'item 'filtre' passé aux requêtes de la classe
      * @param int $perPage : nb d'items par page
@@ -71,7 +71,7 @@ class PaginatedQuery
         $this->url = $url;
         $this->id = $id;
         $this->perPage = $perPage;
-        $this->instanceClasse = new $this->classe();  //  instanceClasse
+        $this->instanceClasse = $this->classe::getInstance();  //  instanceClasse
     }
 
     /**
@@ -81,7 +81,7 @@ class PaginatedQuery
     {
         if ($this->nbItems === null) {
             $fct = $this->queryCount;
-            $this->nbItems = $this->instanceClasse->$fct($this->id);
+            $this->nbItems = $this->classe::$fct($this->id);
         }
 
         return ceil($this->nbItems / $this->perPage);
@@ -116,7 +116,7 @@ class PaginatedQuery
 
             // lecture des éléments de la page dans la base
             $fct = $this->query;
-            $this->items =  $this->instanceClasse->$fct($this->perPage, $offset, $this->id);
+            $this->items =  $this->classe::$fct($this->perPage, $offset, $this->id);
         }
         return ($this->items);
     }

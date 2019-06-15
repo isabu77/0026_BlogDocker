@@ -7,6 +7,7 @@ namespace App\Model;
 class Connect
 {
     /**
+     * L'objet unique Connect
      * @var $_instance
      * @access private
      * @static

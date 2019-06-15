@@ -7,17 +7,46 @@ namespace App\Model;
 class CategoryTable
 {
     /**
+     * L'objet unique CategoryTable
+     * @var $_instance
+     * @access private
+     * @static
+     */
+    private static $_instance = null;
+
+    /**
      * @var connect
      * @access private
      */
-    private $connect;
+    private static $_connect = null;
 
     /**
-     *  constructeur
-     **/
-    public function __construct()
+     * Constructeur de la classe
+     *
+     * @return void
+     * @access private
+     */
+    private function __construct()
     {
-        $this->connect = Connect::getInstance();
+        if (self::$_connect == null)
+            self::$_connect = Connect::getInstance();
+    }
+
+    /**
+     * Méthode qui crée l'unique instance de la classe
+     * si elle n'existe pas encore puis la retourne.
+     *
+     * @param void
+     * @return CategoryTable
+     */
+    public static function getInstance()
+    {
+
+        if (is_null(self::$_instance)) {
+            self::$_instance = new CategoryTable();
+        }
+
+        return self::$_instance;
     }
 
     /**
@@ -25,9 +54,9 @@ class CategoryTable
      * @param void
      * @return int
      **/
-     public function getNbCategory(): int
+     public static function getNbCategory(): int
     {
-        return ($this->connect->executeQuery('SELECT count(id) FROM category')->fetch()[0]);
+        return (self::$_connect->executeQuery('SELECT count(id) FROM category')->fetch()[0]);
     }
 
     /**
@@ -36,9 +65,9 @@ class CategoryTable
      * @return array
      *  
      */
-    public function getCategories(int $perPage, int $offset): array
+    public static function getCategories(int $perPage, int $offset): array
     {
-        $categories = $this->connect->executeQuery(
+        $categories = self::$_connect->executeQuery(
             "SELECT * FROM category LIMIT {$perPage} OFFSET {$offset}"
         )
             ->fetchAll(\PDO::FETCH_CLASS, Category::class);
@@ -51,9 +80,9 @@ class CategoryTable
      * @return Category
      *  
      */
-    public function getCategory(int $id): Category
+    public static function getCategory(int $id): Category
     {
-        $category = $this->category = $this->connect->executeQuery(
+        $category = self::$_connect->executeQuery(
             "SELECT * FROM category WHERE id = {$id}"
         );
         $category->setFetchMode(\PDO::FETCH_CLASS, Category::class);

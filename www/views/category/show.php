@@ -12,9 +12,8 @@ $slug = $params['slug'];
 
 // Connexion à la base
 // lecture de la catégorie îd dans la base (objet Category)
-$categoryTable = new CategoryTable();
-$category = $categoryTable->getCategory($id);
-$postTable = new PostTable();
+$categoryTable = CategoryTable::getInstance();
+$category = $categoryTable::getCategory($id);
 
 if (!$category) {
     throw new \exception("Aucune catégorie ne correspond à cet Id");
