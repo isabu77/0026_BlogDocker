@@ -1,5 +1,5 @@
 <?php
-namespace App\Model;
+namespace App\Model\Entity;
 
 /**
  *  Classe Category : une catégorie du blog 

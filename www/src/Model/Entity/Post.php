@@ -1,5 +1,5 @@
 <?php
-namespace App\Model;
+namespace App\Model\Entity;
 use App\Helpers\Text;
 /**
  *  Classe Post : un article du blog 

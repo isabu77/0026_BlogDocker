@@ -1,6 +1,7 @@
 <?php
-namespace App\Model;
-
+namespace App\Model\Table;
+use App\Model\Entity\Category;
+use App\Model\Entity\Post;
 /**
  *  Classe CategoryTable : accès à la table category 
  **/
@@ -111,7 +112,7 @@ class CategoryTable
                 LEFT JOIN category c on pc.category_id = c.id
                 WHERE post_id IN (" . implode(', ', $ids) . ")"
         )
-            ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Category::class);
+            ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Entity\Category::class);
 
         // puis tableau des ids des posts triés par id contenant l'objet Post
         $postById = [];

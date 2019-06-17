@@ -2,8 +2,8 @@
 namespace App\Controller;
 
 use App\PaginatedQuery;
-use App\Model\CategoryTable;
-use App\Model\PostTable;
+use App\Model\Table\CategoryTable;
+use App\Model\Table\PostTable;
 
 class PostController extends Controller
 {
@@ -23,7 +23,7 @@ class PostController extends Controller
         $paginatedQuery = new PaginatedQuery(
             'getNbPost',
             'getPosts',
-            'App\Model\PostTable',
+            'App\Model\Table\PostTable',
             $uri
         );
         /**

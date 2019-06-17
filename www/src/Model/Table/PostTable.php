@@ -1,6 +1,7 @@
 <?php
-namespace App\Model;
-
+namespace App\Model\Table;
+use App\Model\Entity\Category;
+use App\Model\Entity\Post;
 use Symfony\Component\VarDumper\Caster\ExceptionCaster;
 
 /**

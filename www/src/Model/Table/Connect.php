@@ -1,5 +1,5 @@
 <?php
-namespace App\Model;
+namespace App\Model\Table;
 
 /**
  * Classe principale d'accès à la base de données (singleton)

@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Model\CategoryTable;
+use App\Model\Table\CategoryTable;
 use App\PaginatedQuery;
 
 class CategoryController extends Controller
@@ -16,7 +16,7 @@ class CategoryController extends Controller
         $paginatedQuery = new PaginatedQuery(
             'getNbCategory',
             'getCategories',
-            'App\Model\CategoryTable',
+            'App\Model\Table\CategoryTable',
             $this->getRouter()->url("categories"),
             null,
             10
@@ -53,7 +53,7 @@ class CategoryController extends Controller
         $paginatedQuery = new PaginatedQuery(
             'getNbPost',
             'getPosts',
-            'App\Model\PostTable',
+            'App\Model\Table\PostTable',
             $uri,
             $category->getId()
         );
