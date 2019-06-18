@@ -50,7 +50,7 @@ class App{
     public function getRouter(string $basePath = '/var/www')
     {
         if (is_null($this->router)){
-            $this->router = new Controller\RouterController($basePath . 'views');
+            $this->router = new RouterController($basePath . 'views');
         }
         return $this->router;
 
