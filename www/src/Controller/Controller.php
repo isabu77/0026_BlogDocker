@@ -10,7 +10,7 @@ class Controller
     protected function render(string $view, array $variable = [])
     {
 
-        $variable['debugTime'] == $this->getApp()->getDebugTime();
+        $variable['debugTime'] = $this->getApp()->getDebugTime();
         echo $this->getTwig()->render($view.'.twig', $variable);
     }
     

@@ -1,8 +1,6 @@
 <?php
 namespace App\Controller;
-
 use App\Model\Table\CategoryTable;
-use App\PaginatedQuery;
 
 class CategoryController extends Controller
 {
@@ -13,7 +11,7 @@ class CategoryController extends Controller
     {
         // lecture des catégories dans la base 
 
-        $paginatedQuery = new PaginatedQuery(
+        $paginatedController = new PaginatedController(
             'getNbCategory',
             'getCategories',
             'App\Model\Table\CategoryTable',
@@ -21,7 +19,7 @@ class CategoryController extends Controller
             null,
             10
         );
-        $categories = $paginatedQuery->getItems();
+        $categories = $paginatedController->getItems();
         $title = "Catégories";
 
         $this->render(
@@ -29,7 +27,7 @@ class CategoryController extends Controller
             [
                 "title" => $title,
                 "categories" => $categories,
-                "paginate" => $paginatedQuery->getNavHTML()
+                "paginate" => $paginatedController->getNavHTML()
             ]
         );
     }
@@ -50,14 +48,14 @@ class CategoryController extends Controller
 
         // lecture des articles de la catégorie par son id dans la base 
         $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
-        $paginatedQuery = new PaginatedQuery(
+        $paginatedController = new PaginatedController(
             'getNbPost',
             'getPosts',
             'App\Model\Table\PostTable',
             $uri,
             $category->getId()
         );
-        $posts = $paginatedQuery->getItems();
+        $posts = $paginatedController->getItems();
 
         /**
          *  @var $postById
@@ -73,7 +71,7 @@ class CategoryController extends Controller
             [
                 "title" => $title,
                 "posts" => $postById,
-                "paginate" => $paginatedQuery->getNavHTML()
+                "paginate" => $paginatedController->getNavHTML()
             ]
         );
     }

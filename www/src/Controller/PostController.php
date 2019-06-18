@@ -1,7 +1,5 @@
 <?php
 namespace App\Controller;
-
-use App\PaginatedQuery;
 use App\Model\Table\CategoryTable;
 use App\Model\Table\PostTable;
 
@@ -20,7 +18,7 @@ class PostController extends Controller
          */
 
         $uri = $this->getRouter()->url("home");
-        $paginatedQuery = new PaginatedQuery(
+        $paginatedController = new PaginatedController(
             'getNbPost',
             'getPosts',
             'App\Model\Table\PostTable',
@@ -31,7 +29,7 @@ class PostController extends Controller
          * tableau d'objets Post
          *  
          */
-        $posts = $paginatedQuery->getItems();
+        $posts = $paginatedController->getItems();
 
         if ($posts == null) {
             // page inexistante : page 1
@@ -50,7 +48,7 @@ class PostController extends Controller
 
         $this->render('post/all', [
             'posts' => $postById,
-            'paginate' => $paginatedQuery->getNavHTML(),
+            'paginate' => $paginatedController->getNavHTML(),
             'title' => $title
         ]);
     }

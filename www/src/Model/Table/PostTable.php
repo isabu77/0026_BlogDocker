@@ -7,7 +7,7 @@ use Symfony\Component\VarDumper\Caster\ExceptionCaster;
 /**
  *  Classe PostTable : accès à la table post 
  **/
-class PostTable
+class PostTable extends Table
 {
     /**
      * L'objet unique PostTable
@@ -16,24 +16,6 @@ class PostTable
      * @static
      */
     private static $_instance = null;
-
-    /**
-     * @var connect
-     * @access private
-     */
-    private static $_connect = null;
-
-    /**
-     * Constructeur de la classe
-     *
-     * @return void
-     * @access private
-     */
-    private function __construct()
-    {
-        if (self::$_connect == null)
-            self::$_connect = Connect::getInstance();
-    }
 
     /**
      * Méthode qui crée l'unique instance de la classe
@@ -78,15 +60,6 @@ class PostTable
      **/
     public static function getPosts(int $perPage, int $offset, int $idCategory = null): array
     {
-        /* SELECT * FROM post 
-        WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ORDER BY id 
-
-        SELECT p.id, p.slug, p.name , p.content, p.created_at
-            FROM post_category pc 
-            JOIN post p ON pc.post_id = p.id 
-            WHERE pc.category_id = {$idCategory}
-        */
-
         if ($idCategory == null) {
             $statement = self::$_connect->executeQuery("SELECT * FROM post as p
             ORDER BY created_at DESC

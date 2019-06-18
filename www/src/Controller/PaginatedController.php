@@ -1,10 +1,12 @@
 <?php
-namespace App;
+namespace App\Controller;
+use App\URL;
 
 /**
- * classe PaginatedQuery : gestion d'une pagination avec requête à la base (éléments d'une classe donnée)
+ * classe PaginatedController : gestion d'une pagination avec requête à la base 
+ * (éléments d'une classe donnée)
  */
-class PaginatedQuery
+class PaginatedController
 {
     /**
      * @var string 
@@ -63,8 +65,14 @@ class PaginatedQuery
      * @param int $id : id de l'item 'filtre' passé aux requêtes de la classe
      * @param int $perPage : nb d'items par page
      */
-    public function __construct(string $queryCount, string $query, string $classe, string $url, int $id = null, int $perPage = 12)
-    {
+    public function __construct(
+        string $queryCount,
+        string $query,
+        string $classe,
+        string $url,
+        int $id = null,
+        int $perPage = 12
+    ) {
         $this->classe = $classe;
         $this->queryCount = $queryCount;
         $this->query = $query;

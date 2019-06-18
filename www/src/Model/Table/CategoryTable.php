@@ -5,7 +5,7 @@ use App\Model\Entity\Post;
 /**
  *  Classe CategoryTable : accès à la table category 
  **/
-class CategoryTable
+class CategoryTable extends Table
 {
     /**
      * L'objet unique CategoryTable
@@ -14,24 +14,6 @@ class CategoryTable
      * @static
      */
     private static $_instance = null;
-
-    /**
-     * @var connect
-     * @access private
-     */
-    private static $_connect = null;
-
-    /**
-     * Constructeur de la classe
-     *
-     * @return void
-     * @access private
-     */
-    private function __construct()
-    {
-        if (self::$_connect == null)
-            self::$_connect = Connect::getInstance();
-    }
 
     /**
      * Méthode qui crée l'unique instance de la classe
@@ -112,7 +94,7 @@ class CategoryTable
                 LEFT JOIN category c on pc.category_id = c.id
                 WHERE post_id IN (" . implode(', ', $ids) . ")"
         )
-            ->fetchAll(\PDO::FETCH_CLASS, \App\Model\Entity\Category::class);
+            ->fetchAll(\PDO::FETCH_CLASS, Category::class);
 
         // puis tableau des ids des posts triés par id contenant l'objet Post
         $postById = [];
@@ -126,4 +108,5 @@ class CategoryTable
         }
         return $postById;
     }
+    
 }
