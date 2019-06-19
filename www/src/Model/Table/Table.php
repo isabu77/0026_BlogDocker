@@ -12,7 +12,7 @@ class Table
      * @var connect (old)
      * @access protected
      */
-    protected static $_connect = null;
+    //protected static $_connect = null;
 
     /**
      * @var db : DatabaseController
@@ -33,12 +33,12 @@ class Table
      * @return void
      * @access private
      */
-    public function __constructOld()
+   /*  public function __constructOld()
     {
         if (self::$_connect == null)
             self::$_connect = Connect::getInstance();
     }
-
+ */
     //==============================  correction AFORMAC
     /**
      * Constructeur de la classe avec un databaseController
@@ -48,9 +48,9 @@ class Table
      */
     public function __construct(DatabaseController $db = null)
     {
-        if ($db == null) {
+/*         if ($db == null) {
             $this->__constructOld();
-        } else {
+        } else  */{
             $this->db = $db;
             if (is_null($this->table)) {
                 $parts = explode('\\', get_class($this));
@@ -61,15 +61,27 @@ class Table
             }
         }
     }
-    public function count()
+    public function count(?int $id = null)
     {
-        $nbpage =  $this->query("SELECT COUNT(id) as nbrow FROM $this->table",null, true, null);
+        $nbpage =  $this->query("SELECT COUNT(id) as nbrow FROM $this->table", null, true, null);
         // recupere un objet PostEntity
         //dd($nbpage);
         return $nbpage;
     }
 
-    public function query(string $statement, ?array $attributes = null , bool $one = false, ?string $class_name = null)
+    /**
+     * lecture d'un enregistrement par son id 
+     * valable pour n'importe quelle table
+     */
+    public function find(int $id)
+    {
+        return $this->query("SELECT * FROM {$this->table} WHERE id=?", [$id], true);
+    }
+
+    /**
+     * exécution de la requête à la base
+     */
+    public function query(string $statement, ?array $attributes = null, bool $one = false, ?string $class_name = null)
     {
         if (is_null($class_name)) {
             // instance de la classe 'Entity'

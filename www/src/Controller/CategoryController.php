@@ -1,18 +1,20 @@
 <?php
 namespace App\Controller;
-use App\Model\Table\CategoryTable;
+//use App\Model\Table\CategoryTable;
 
 class CategoryController extends Controller
 {
     /**
-     * constructeur
+     * constructeur par Correction AFORMAC
      */
     public function __construct()
     {
         // crée une instance de la classe PostTable dans la propriété $this->post
-        // $this->post est créée dynamiquement
+        // $this->category est créée dynamiquement
         $this->loadModel('category');    
         
+        // $this->post est créée dynamiquement pour accéder aux méthodes de PostTable
+        // via PaginatedQueryController pour afficher les posts d'une catégorie
         $this->loadModel('post');
     }
 
@@ -31,6 +33,7 @@ class CategoryController extends Controller
 
         $title = "Catégories";
 
+        // affichage HTML avec category/all.twig
         $this->render('category/all', [
             'categories' => $categories,
             'paginate' => $paginatedQuery->getNavHTML(),
@@ -38,7 +41,8 @@ class CategoryController extends Controller
         ]);
 
         //==============================  correction AFORMAC FIN
-
+        
+        //============================= MON CODE
 /*         
         // lecture des catégories dans la base 
         $paginatedController = new PaginatedController(
@@ -61,6 +65,7 @@ class CategoryController extends Controller
             ]
         );
 */
+        //============================= MON CODE === FIN
     }
 
     /**
@@ -70,25 +75,38 @@ class CategoryController extends Controller
     {
         $id = (int)$params['id'];
         $slug = $params['slug'];
-        //==============================  correction AFORMAC
-        $category = $this->category->getCategoryById($id);
 
-        // les articles de la catégorie : $this->post n'existe pas !!!!!!
+        //==============================  correction AFORMAC
+        // méthode générique de table.php
+        $category = $this->category->find($id);
+
+        if (!$category) {
+            throw new \exception("Aucune catégorie ne correspond à cet Id");
+        }
+        if ($category->getSlug() !== $slug) {
+            $url = $this->generateUrl('category', ['id' => $id, 'slug' => $category->getSlug()]);
+            // code 301 : redirection permanente pour le navigateur (de son cache, plus de requete au serveur)
+            http_response_code(301);
+            header('Location:' . $url);
+            exit();
+        }
+
+        $title = 'Catégorie : ' . $category->getName();
+
+        // les articles de la catégorie : ERROR !! affiche tous les articles, de toutes catégories
+        // $this->post doit etre créé par loadModel dans le constructeur
         $paginatedQuery = new PaginatedQueryController(
             $this->post,
             $this->generateUrl('category', ["id" => $category->getId(), "slug" => $category->getSlug()])
         );
-        $postById = $paginatedQuery->getItems();
+        $postById = $paginatedQuery->getItemsInId($id);
 
-
-
-        //==============================  correction AFORMAC FIN
-
+        //============================= MON CODE 
         // lecture de la catégorie id dans la base (objet Category)
         //$categoryTable = CategoryTable::getInstance();
         //$category = $categoryTable::getCategory($id);
+        //============================= MON CODE === FIN
 
-        $title = $category->getName();
 
         $this->render(
             "category/show",
@@ -98,9 +116,12 @@ class CategoryController extends Controller
                 "paginate" => $paginatedQuery->getNavHTML()
             ]
         );
+        //==============================  correction AFORMAC FIN
 
+        //============================= MON CODE
         // lecture des articles de la catégorie par son id dans la base 
-/*         $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
+/*         
+        $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
         $paginatedController = new PaginatedController(
             'getNbPost',
             'getPosts',
@@ -127,5 +148,7 @@ class CategoryController extends Controller
                 "paginate" => $paginatedController->getNavHTML()
             ]
         );
- */    }
+ */    
+        //============================= MON CODE === FIN
+    }
 }

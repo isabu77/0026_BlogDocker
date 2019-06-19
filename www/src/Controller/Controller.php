@@ -53,6 +53,7 @@ class Controller
     /**
      * crée dynamiquement une instance de la classe $nameTable
      * et la stocke dans la propriété de nom $nameTable
+     * héritée dans sa sous-classe qui appelle ce loadModel dans son constructeur
      */
     protected function loadModel(string $nameTable): void
     {
