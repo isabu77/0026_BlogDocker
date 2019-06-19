@@ -1,7 +1,9 @@
 <?php
 namespace App\Model\Table;
+
 use App\Model\Entity\Category;
 use App\Model\Entity\Post;
+
 /**
  *  Classe CategoryTable : accès à la table category 
  **/
@@ -108,5 +110,15 @@ class CategoryTable extends Table
         }
         return $postById;
     }
-    
+
+    //==============================  correction AFORMAC
+    public function allInId(string $ids)
+    {
+        return $this->query("SELECT c.*, pc.post_id
+        FROM post_category pc 
+        LEFT JOIN category c on pc.category_id = c.id
+        WHERE post_id IN (" . $ids . ")");
+
+        
+    }
 }

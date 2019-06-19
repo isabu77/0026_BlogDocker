@@ -5,6 +5,16 @@ use App\Model\Table\CategoryTable;
 class CategoryController extends Controller
 {
     /**
+     * constructeur
+     */
+    public function __construct()
+    {
+        // crée une instance de la classe PostTable dans la propriété $this->post
+        // $this->post est créée dynamiquement
+        $this->loadModel('category');
+    }
+
+    /**
      * toutes les catégories
      */
     public function all()

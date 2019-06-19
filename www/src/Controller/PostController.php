@@ -2,16 +2,48 @@
 namespace App\Controller;
 use App\Model\Table\CategoryTable;
 use App\Model\Table\PostTable;
+use App\Model\Entity\Category;
+use App\Model\Entity\Post;
 
 class PostController extends Controller
 {
     /**
+     * constructeur
+     */
+    public function __construct()
+    {
+        // crée une instance de la classe PostTable dans la propriété $this->post
+        // $this->post est créée dynamiquement
+        $this->loadModel('post');
+    }
+
+    /**
      * tous les articles
      */
-
     public function all()
     {
+        //==============================  correction AFORMAC
+        // $this->post contient une instance de la classe PostTable
+        $paginatedQuery = new PaginatedQueryController(
+            $this->post,
+            $this->generateUrl('post')
+        );
+        $posts = $paginatedQuery->getItems();
 
+        $title = 'Mon Blog en MVC';
+
+        $this->render('post/all', [
+            'posts' => $posts,
+            'paginate' => $paginatedQuery->getNavHTML(),
+            'title' => $title
+        ]);
+        
+        return;
+    //==============================  correction AFORMAC FIN
+
+
+        
+        //============================= MON CODE
         /**
          * fichier qui génère la vue pour l'url /
          * (Home)

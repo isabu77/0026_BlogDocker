@@ -1,7 +1,7 @@
 <?php
 namespace App\Model\Table;
-use App\Model\Entity\Category;
-use App\Model\Entity\Post;
+use App\Model\Entity\CategoryEntity;
+use App\Model\Entity\PostEntity;
 use Symfony\Component\VarDumper\Caster\ExceptionCaster;
 
 /**
@@ -15,7 +15,7 @@ class PostTable extends Table
      * @access private
      * @static
      */
-    private static $_instance = null;
+    //private static $_instance = null;
 
     /**
      * Méthode qui crée l'unique instance de la classe
@@ -24,7 +24,7 @@ class PostTable extends Table
      * @param void
      * @return PostTable
      */
-    public static function getInstance()
+/*     public static function getInstance()
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new PostTable();
@@ -33,14 +33,15 @@ class PostTable extends Table
         return self::$_instance;
     }
 
-    /**
+ */    
+/**
      *  retourne le nombre total de posts d'une catégorie dans la table post
      * @param int
      * @return int
      *   SELECT count(id) FROM post 
      *   WHERE id IN (SELECT post_id FROM post_category WHERE category_id = {$idCategory}) ");
      **/
-    public static function getNbPost(int $idCategory = null): int
+ /*    public static function getNbPost(int $idCategory = null): int
     {
         if ($idCategory === NULL) {
             $statement = self::$_connect->executeQuery("SELECT count(id) FROM post");
@@ -50,7 +51,7 @@ class PostTable extends Table
         }
         return $statement->fetch()[0];
     }
-
+ */
     /**
      *  retourne tous les articles d'une catégorie dans la table post
      * @param int
@@ -58,7 +59,7 @@ class PostTable extends Table
      * @param int
      * @return int
      **/
-    public static function getPosts(int $perPage, int $offset, int $idCategory = null): array
+/*     public static function getPosts(int $perPage, int $offset, int $idCategory = null): array
     {
         if ($idCategory == null) {
             $statement = self::$_connect->executeQuery("SELECT * FROM post as p
@@ -79,26 +80,25 @@ class PostTable extends Table
 
         return $posts;
     }
-
+ */
     /**
      *  retourne un article recherché par son id dans la table post
      * @param int
      * @return int
      **/
-    public static function getPost(int $id): Post
+/*     
+public static function getPost(int $id): Post
     {
         $statement = self::$_connect->executeQuery("SELECT * FROM post 
         WHERE id = {$id}");
         $statement->setFetchMode(\PDO::FETCH_CLASS, Post::class);
-        /**
-         * @var Post|false
-         */
         $post = $statement->fetch();
         $post->setCategories(self::getCategoriesOfPost($id));
 
         return ($post);
     }
 
+ */
     /**
      *  retourne toutes les catégories d'un article
      * @param int
@@ -106,7 +106,7 @@ class PostTable extends Table
      * @param int
      * @return int
      **/
-    public static function getCategoriesOfPost(int $idPost): array
+/*     public static function getCategoriesOfPost(int $idPost): array
     {
         $statement = self::$_connect->executeQuery(
             "SELECT c.id, c.slug, c.name 
@@ -122,5 +122,30 @@ class PostTable extends Table
         return $categories;
     }
 
+ */    //==============================  correction AFORMAC
+    //  lecture de tous les articles d'une page
+    public function allByLimit(int $limit, int $offset)
+    {
+
+        $posts = $this->query("SELECT * FROM {$this->table} LIMIT {$limit} OFFSET {$offset}", null);
+
+        $ids = array_map(function (PostEntity $post) {
+            return $post->getId();
+        }, $posts);
+        
+        
+        $categories = (new CategoryTable($this->db))->allInId(implode(', ', $ids));
+        
+        
+        $postById = [];
+        foreach ($posts as $post) {
+            $postById[$post->getId()] = $post;
+        }
+        //dd($categories);
+        foreach ($categories as $category) {
+            $postById[$category->post_id]->setCategory($category);
+        }
+        return $postById;
+    }
     
 }
