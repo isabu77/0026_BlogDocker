@@ -11,7 +11,9 @@ class CategoryController extends Controller
     {
         // crée une instance de la classe PostTable dans la propriété $this->post
         // $this->post est créée dynamiquement
-        $this->loadModel('category');
+        $this->loadModel('category');    
+        
+        $this->loadModel('post');
     }
 
     /**
@@ -19,8 +21,26 @@ class CategoryController extends Controller
      */
     public function all()
     {
-        // lecture des catégories dans la base 
+        //==============================  correction AFORMAC
+        // $this->post contient une instance de la classe PostTable
+        $paginatedQuery = new PaginatedQueryController(
+            $this->category,
+            $this->generateUrl('categories')
+        );
+        $categories = $paginatedQuery->getItems();
 
+        $title = "Catégories";
+
+        $this->render('category/all', [
+            'categories' => $categories,
+            'paginate' => $paginatedQuery->getNavHTML(),
+            'title' => $title
+        ]);
+
+        //==============================  correction AFORMAC FIN
+
+/*         
+        // lecture des catégories dans la base 
         $paginatedController = new PaginatedController(
             'getNbCategory',
             'getCategories',
@@ -40,6 +60,7 @@ class CategoryController extends Controller
                 "paginate" => $paginatedController->getNavHTML()
             ]
         );
+*/
     }
 
     /**
@@ -49,15 +70,37 @@ class CategoryController extends Controller
     {
         $id = (int)$params['id'];
         $slug = $params['slug'];
+        //==============================  correction AFORMAC
+        $category = $this->category->getCategoryById($id);
 
-        // lecture de la catégorie îd dans la base (objet Category)
-        $categoryTable = CategoryTable::getInstance();
-        $category = $categoryTable::getCategory($id);
+        // les articles de la catégorie : $this->post n'existe pas !!!!!!
+        $paginatedQuery = new PaginatedQueryController(
+            $this->post,
+            $this->generateUrl('category', ["id" => $category->getId(), "slug" => $category->getSlug()])
+        );
+        $postById = $paginatedQuery->getItems();
 
-        $title = 'categorie : ' . $category->getName();
+
+
+        //==============================  correction AFORMAC FIN
+
+        // lecture de la catégorie id dans la base (objet Category)
+        //$categoryTable = CategoryTable::getInstance();
+        //$category = $categoryTable::getCategory($id);
+
+        $title = $category->getName();
+
+        $this->render(
+            "category/show",
+            [
+                "title" => $title,
+                "posts" => $postById,
+                "paginate" => $paginatedQuery->getNavHTML()
+            ]
+        );
 
         // lecture des articles de la catégorie par son id dans la base 
-        $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
+/*         $uri = $this->getRouter()->url("category", ["id" => $category->getId(), "slug" => $category->getSlug()]);
         $paginatedController = new PaginatedController(
             'getNbPost',
             'getPosts',
@@ -66,14 +109,14 @@ class CategoryController extends Controller
             $category->getId()
         );
         $posts = $paginatedController->getItems();
-
+ */
         /**
          *  @var $postById
          * Tableau d'objets Post
          * dont la propriété  $catégories est lue dans la base
          *  
          */
-
+/*
         $postById = $categoryTable::getCategoriesOfPosts($posts);
 
         $this->render(
@@ -84,5 +127,5 @@ class CategoryController extends Controller
                 "paginate" => $paginatedController->getNavHTML()
             ]
         );
-    }
+ */    }
 }

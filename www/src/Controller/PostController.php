@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+
 use App\Model\Table\CategoryTable;
 use App\Model\Table\PostTable;
 use App\Model\Entity\Category;
@@ -26,29 +27,23 @@ class PostController extends Controller
         // $this->post contient une instance de la classe PostTable
         $paginatedQuery = new PaginatedQueryController(
             $this->post,
-            $this->generateUrl('post')
+            $this->generateUrl('home')
         );
-        $posts = $paginatedQuery->getItems();
+        $postById = $paginatedQuery->getItems();
 
         $title = 'Mon Blog en MVC';
 
         $this->render('post/all', [
-            'posts' => $posts,
+            'posts' => $postById,
             'paginate' => $paginatedQuery->getNavHTML(),
             'title' => $title
         ]);
-        
-        return;
-    //==============================  correction AFORMAC FIN
 
+        //==============================  correction AFORMAC FIN
 
-        
         //============================= MON CODE
-        /**
-         * fichier qui génère la vue pour l'url /
-         * (Home)
-         */
-
+        // fichier qui génère la vue pour l'url /
+        /*        
         $uri = $this->getRouter()->url("home");
         $paginatedController = new PaginatedController(
             'getNbPost',
@@ -56,11 +51,6 @@ class PostController extends Controller
             'App\Model\Table\PostTable',
             $uri
         );
-        /**
-         *  @var $post
-         * tableau d'objets Post
-         *  
-         */
         $posts = $paginatedController->getItems();
 
         if ($posts == null) {
@@ -71,11 +61,7 @@ class PostController extends Controller
 
         $title = 'Mon Blog en MVC';
 
-        /**
-         *  @var $postById
-         * tableau d'objets Post dont la propriété $catégories est lue dans la base
-         */
-
+        //tableau d'objets Post dont la propriété $catégories est lue dans la base
         $postById = CategoryTable::getInstance()::getCategoriesOfPosts($posts);
 
         $this->render('post/all', [
@@ -83,22 +69,33 @@ class PostController extends Controller
             'paginate' => $paginatedController->getNavHTML(),
             'title' => $title
         ]);
+ */
     }
 
     /**
-     * un seul article
+     * un seul article by 'lire plus'
      */
     public function show(array $params)
     {
         $id = (int)$params['id'];
         $slug = $params['slug'];
 
+        //==============================  correction AFORMAC
+        /*         $paginatedQuery = new PaginatedQueryController(
+            $this->post,
+            $this->generateUrl('home')
+        );
+        $post = $paginatedQuery->getItems();
+ */
+        $post = $this->post->getPostById($id);
+
+        //==============================  correction AFORMAC FIN
+
+        //============================= MON CODE
         // lecture de l'article dans la base (objet Post) par son id
-        /**
-         * @var Post|false
-         */
-        $postTable = PostTable::getInstance();
-        $post = $postTable->getPost($id);
+        //$postTable = PostTable::getInstance();
+        //$post = $postTable->getPost($id);
+
 
         if (!$post) {
             throw new \exception("Aucun article ne correspond à cet Id");
@@ -113,7 +110,7 @@ class PostController extends Controller
             exit();
         }
 
-        $title = "Article " . $post->getName();
+        $title = $post->getName();
 
         $this->render('post/show', [
             'post' => $post,

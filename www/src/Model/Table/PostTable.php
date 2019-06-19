@@ -122,8 +122,12 @@ public static function getPost(int $id): Post
         return $categories;
     }
 
- */    //==============================  correction AFORMAC
-    //  lecture de tous les articles d'une page
+ */    
+
+    //==============================  correction AFORMAC
+    /**
+     * lecture de tous les articles d'une page
+     */
     public function allByLimit(int $limit, int $offset)
     {
 
@@ -146,6 +150,14 @@ public static function getPost(int $id): Post
             $postById[$category->post_id]->setCategory($category);
         }
         return $postById;
+    }
+
+    /**
+     * lecture d'un article par son id
+     */
+    public function getPostById(int $id)
+    {
+        return $this->query("SELECT * FROM {$this->table} WHERE id={$id}", null, true);
     }
     
 }

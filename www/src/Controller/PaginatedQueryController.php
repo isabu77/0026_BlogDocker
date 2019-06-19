@@ -62,34 +62,6 @@ class PaginatedQueryController
 
     }
 
-    /**
-     * Retourne la liste des éléments d'une page
-     * par appel de la méthode de requête de la classe fournies
-     * @param void
-     * @return array
-     */
-    public function getItems(): ?array
-    {
-        $currentPage = $this->getCurrentPage();
-        $nbPage = $this->getNbPages();
-        //dd($nbPages . ' ' . $currentPage);
-
-        if ($currentPage > $nbPage) {
-            // page inexistante : page 1
-            throw new \Exception ("pas de page");
-            //header('location: ' . $this->url);
-            exit();
-        }
-
-        if ($this->items === null) {
-            $offset = ($currentPage - 1) * $this->perPage;
-            // lecture des éléments de la page dans la base
-            $this->items = $this->classTable->allByLimit($this->perPage, $offset);
-
-        }
-        return ($this->items);
-    }
-
     private function getCurrentPage(): int
     {
         return URL::getPositiveInt('page', 1);
@@ -135,5 +107,32 @@ class PaginatedQueryController
         </nav>
 HTML;
     }
+    /**
+     * Retourne la liste des éléments d'une page
+     * par appel de la méthode de requête de la classe fournies
+     * @param void
+     * @return array
+     */
+    public function getItems(): ?array
+    {
+        $currentPage = $this->getCurrentPage();
+        $nbPage = $this->getNbPages();
+
+        if ($currentPage > $nbPage) {
+            // page inexistante : page 1
+            throw new \Exception ("pas de page");
+            //header('location: ' . $this->url);
+            exit();
+        }
+
+        if ($this->items === null) {
+            $offset = ($currentPage - 1) * $this->perPage;
+            // lecture des éléments de la page dans la base
+            $this->items = $this->classTable->allByLimit($this->perPage, $offset);
+
+        }
+        return ($this->items);
+    }
+
 
 }
