@@ -70,11 +70,7 @@ class PaginatedQueryController
     private function getNbPages(int $id = null): float
     {
         if ($this->count === null) {
-           if (!$id) {
-                $this->count = $this->classTable->count()->nbrow;
-            } else {
-                $this->count = $this->classTable->countById($id)->nbrow;
-            }
+            $this->count = $this->classTable->count($id)->nbrow;
         }
         return ceil($this->count / $this->perPage);
     }

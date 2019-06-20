@@ -151,10 +151,11 @@ public static function getPost(int $id): Post
         return $postById;
     }
 
-    public function countById(?int $id = null)
+    public function count(?int $id = null)
     {
         if (!$id){
-            return $this->count();
+            // sans id : appel de la méthode de la classe parente Table.php
+            return parent::count();
         }else{
             return $this->query("SELECT COUNT(id) as nbrow FROM {$this->table} as p 
                     JOIN post_category as pc ON pc.post_id = p.id 
