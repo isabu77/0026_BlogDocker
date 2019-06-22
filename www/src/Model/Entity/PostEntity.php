@@ -1,6 +1,7 @@
 <?php
 namespace App\Model\Entity;
-use App\Helpers\Text;
+use \Core\Controller\Helpers\TextController;
+use \Core\Model\Entity;
 /**
  *  Classe Post : un article du blog 
  **/
@@ -72,7 +73,7 @@ class PostEntity extends Entity
      **/
     public function getExcerpt(int $lg):string
     {
-        return htmlentities( Text::excerpt($this->content, $lg));
+        return htmlentities( TextController::excerpt($this->content, $lg));
     }
     /**
      *  catégories du post
@@ -104,7 +105,9 @@ class PostEntity extends Entity
      */
     public function getUrl():string
     {
-        return \App\App::getInstance()->getRouter()->url('post', [
+        return \App\App::getInstance()
+            ->getRouter()
+            ->url('post', [
             'slug' => $this->getSlug(),
             'id' => $this->getId()
         ]);

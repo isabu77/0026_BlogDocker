@@ -1,13 +1,17 @@
 <?php
 namespace App;
 
-use \App\Controller\RouterController;
-use \App\Controller\Database\DatabaseController;
+use \Core\Controller\RouterController;
+use \Core\Controller\URLController;
+use \Core\Controller\Database\DatabaseMysqlController;
 
+/**
+ * classe SINGLETON : classe PRINCIPALE de l'application
+ */
 class App
 {
 
-    private static $_instance;
+    private static $INSTANCE;
 
     public $title;
 
@@ -15,14 +19,20 @@ class App
     private $startTime;
     private $db_instance;
 
+    /**
+     * retourne l'instance UNIQUE de la classe App
+     */
     public static function getInstance()
     {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new App();
+        if (is_null(self::$INSTANCE)) {
+            self::$INSTANCE = new App();
         }
-        return self::$_instance;
+        return self::$INSTANCE;
     }
 
+    /**
+     * charge les outils et vérifie la page demandée
+     */
     public static function load()
     {
         if (getenv("ENV_DEV")) {
@@ -31,7 +41,7 @@ class App
             $whoops->register();
         }
 
-        $numPage = \App\URL::getPositiveInt("page");
+        $numPage = URLController::getPositiveInt("page");
 
         if ($numPage !== null) {
             if ($numPage == 1) {
@@ -50,6 +60,10 @@ class App
         }
     }
 
+    /**
+     * crée l'instance du Router
+     * et la retourne
+     */
     public function getRouter(string $basePath = '/var/www')
     {
         if (is_null($this->router)) {
@@ -58,11 +72,17 @@ class App
         return $this->router;
     }
 
+    /**
+     * démarre le compteur pour le chargement de l'Application
+     */
     public function setStartTime()
     {
         $this->startTime = microtime(true);
     }
 
+    /**
+     * 
+     */
     public function getDebugTime()
     {
         return number_format((microtime(true) - $this->startTime) * 1000, 2);
@@ -72,14 +92,14 @@ class App
     /**
      * retourne l'instance DatabaseController
      */
-    public function getDb(): DatabaseController
+    public function getDb(): DatabaseMysqlController
     {
         if (is_null($this->db_instance)) {
-            $this->db_instance = new DatabaseController(
+            $this->db_instance = new DatabaseMysqlController(
                 getenv('MYSQL_DATABASE'),
                 getenv('MYSQL_USER'),
                 getenv('MYSQL_PASSWORD'),
-                getenv('MYSQL_HOST')
+                getenv('CONTAINER_MYSQL')
             );
         }
         return $this->db_instance;
