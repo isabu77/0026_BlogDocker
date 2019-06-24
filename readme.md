@@ -1,11 +1,12 @@
-# Création d'un BLOG en MVC (Model - View - Controller)
+# BLOG en MVC (Model - View - Controller)
 
-Modèle MVC avec dossier 'Core' contenant les classes génériques réutilisables en MVC
+Modèle MVC avec dossier 'Core' contenant les classes génériques réutilisables
 
 ## Le blog :
 - Navigation : un menu 'Home Catégories'
 - Page d'accueil : Liste des articles avec leurs catégories et un lien 'lire plus"
 - Page Catégories : liste des catégories avec lien sur chacune et la liste de ses articles
+- Page Catégorie : liste des articles d'une catégorie
 - Page d'un article : contenu et catégories de l'article
 
 ## dossier 'blog' : l'environnement de travail
@@ -21,7 +22,7 @@ Modèle MVC avec dossier 'Core' contenant les classes génériques réutilisable
 - start.sh : lancement de l'environnement avec docker-compose
 - stop.sh : arrêt et destruction de l'environnement docker
 
-- 
+ 
 - les dossiers :
 
 ### docker : contient le fichier 'Dockerfile' 
@@ -68,7 +69,7 @@ docker exec blog php commande/createsql.php
     PostController.php : contrôleur des url
     PaginatedQueryAppController.php : contrôleur de la pagination
 
-- www/src/Model : les classes génériques du modèle qui héritent de core/model
+- www/src/Model : les classes spécifiques du modèle qui héritent de core/model
     Table.php : requêtes au tables
     Entity.php : Description d'un enregistrement de table
 
